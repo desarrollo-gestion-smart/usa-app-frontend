@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877634481534",
+    "project_id": "usa-all-benefits-group",
+    "storage_bucket": "usa-all-benefits-group.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877634481534:android:2be91dcbb4ed61d8d1172f",
+        "android_client_info": {
+          "package_name": "com.example.all_benefits_group"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1QCqme9ezhJ_qsZAvtDleIMG9NEdZb-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
