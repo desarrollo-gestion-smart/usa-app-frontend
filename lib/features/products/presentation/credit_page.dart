@@ -142,6 +142,8 @@ class _CreditPageState extends State<CreditPage>
                         icon: '👤',
                         title: 'Individuales',
                         subtitle: 'Repara tu crédito personal',
+                        description: 'Mejora tu score de crédito y accede a mejores tasas. Tu historial, restaurado.',
+                        onTap: () => _showCreditDetail(context, '👤', 'Individuales', 'Repara tu crédito personal', 'Mejora tu score de crédito y accede a mejores tasas. Tu historial, restaurado.'),
                       ),
 
                       const SizedBox(height: 12),
@@ -150,6 +152,8 @@ class _CreditPageState extends State<CreditPage>
                         icon: '🏢',
                         title: 'Empresariales',
                         subtitle: 'Restaura la salud crediticia de tu negocio',
+                        description: 'Fortalece el perfil crediticio de tu empresa para obtener financiamiento favorable.',
+                        onTap: () => _showCreditDetail(context, '🏢', 'Empresariales', 'Restaura la salud crediticia de tu negocio', 'Fortalece el perfil crediticio de tu empresa para obtener financiamiento favorable.'),
                       ),
                     ],
                   ),
@@ -326,11 +330,11 @@ class _CreditPageState extends State<CreditPage>
     required String icon,
     required String title,
     required String subtitle,
+    required String description,
+    required VoidCallback onTap,
   }) {
     return GestureDetector(
-      onTap: () {
-        // TODO: Navigate to credit detail
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
@@ -338,43 +342,211 @@ class _CreditPageState extends State<CreditPage>
           border: Border.all(color: AppTheme.line, width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              icon,
-              style: const TextStyle(fontSize: 36),
+            Row(
+              children: [
+                Text(
+                  icon,
+                  style: const TextStyle(fontSize: 36),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.fg,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.nunito(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: AppTheme.muted,
+                ),
+              ],
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppTheme.accent.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
                 children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.fredoka(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.fg,
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppTheme.accent,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Icon(
+                      Icons.lightbulb_outline,
+                      color: Colors.white,
+                      size: 12,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.nunito(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.muted,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: GoogleFonts.nunito(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.fg,
+                        height: 1.3,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: AppTheme.muted,
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCreditDetail(BuildContext context, String icon, String title, String subtitle, String description) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppTheme.line,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: AppTheme.accent.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  icon,
+                  style: const TextStyle(fontSize: 36),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: GoogleFonts.fredoka(
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.fg,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: GoogleFonts.nunito(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: AppTheme.muted,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: AppTheme.accent.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: AppTheme.accent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.lightbulb_outline,
+                      color: Colors.white,
+                      size: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.fg,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: AppTheme.accent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'CERRAR',
+                  style: GoogleFonts.fredoka(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
           ],
+        ),
         ),
       ),
     );

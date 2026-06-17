@@ -43,7 +43,7 @@ class RecommendationService {
     debugPrint('│ 🟢 RECOMMENDATIONS RESPONSE');
     debugPrint('├──────────────────────────────────────────');
     debugPrint('│ STATUS CODE: ${response.statusCode}');
-    debugPrint('│ BODY: ${responseBody.length > 500 ? responseBody.substring(0, 500) + '...' : responseBody}');
+    debugPrint('│ BODY: ${responseBody.length > 500 ? '${responseBody.substring(0, 500)}...' : responseBody}');
     debugPrint('└──────────────────────────────────────────');
 
     // Si el status NO es 2xx, extraemos un mensaje legible SIN forzar JSON

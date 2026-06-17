@@ -108,7 +108,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage>
                           );
                         },
                         child: Image.asset(
-                          'assets/images/bebe-university.png',
+                          'assets/images/bebe/notario-avatar.png',
                           width: 220,
                           height: 220,
                           fit: BoxFit.contain,

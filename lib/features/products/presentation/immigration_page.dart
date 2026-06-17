@@ -142,6 +142,8 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                         icon: '👨‍👩‍👧‍👦',
                         title: 'Petición Familiar',
                         subtitle: 'Reúnete con tus seres queridos',
+                        description: 'Proceso legal para traer a tu familia a Estados Unidos. Visas de prometido, familiar inmediato y más.',
+                        onTap: () => _showImmigrationDetail(context, '👨‍👩‍👧‍👦', 'Petición Familiar', 'Reúnete con tus seres queridos', 'Proceso legal para traer a tu familia a Estados Unidos. Visas de prometido, familiar inmediato y más.'),
                       ),
 
                       const SizedBox(height: 12),
@@ -150,6 +152,8 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                         icon: '🏛️',
                         title: 'Asilos',
                         subtitle: 'Protección para perseguidos políticos',
+                        description: 'Protección legal para quienes huyen de persecución en su país. Asesoría especializada en casos de asilo.',
+                        onTap: () => _showImmigrationDetail(context, '🏛️', 'Asilos', 'Protección para perseguidos políticos', 'Protección legal para quienes huyen de persecución en su país. Asesoría especializada en casos de asilo.'),
                       ),
 
                       const SizedBox(height: 12),
@@ -158,6 +162,8 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                         icon: '🇺🇸',
                         title: 'Ciudadanía',
                         subtitle: 'Conviértete en ciudadano',
+                        description: 'Obtén la ciudadanía americana. Guía paso a paso para el proceso de naturalización.',
+                        onTap: () => _showImmigrationDetail(context, '🇺🇸', 'Ciudadanía', 'Conviértete en ciudadano', 'Obtén la ciudadanía americana. Guía paso a paso para el proceso de naturalización.'),
                       ),
 
                       const SizedBox(height: 12),
@@ -166,6 +172,8 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                         icon: '📋',
                         title: 'Permisos de Trabajo',
                         subtitle: 'Trabaja legalmente aquí',
+                        description: 'Autorización de empleo para trabajar legalmente en USA. DACA, EAD y otros programas.',
+                        onTap: () => _showImmigrationDetail(context, '📋', 'Permisos de Trabajo', 'Trabaja legalmente aquí', 'Autorización de empleo para trabajar legalmente en USA. DACA, EAD y otros programas.'),
                       ),
                     ],
                   ),
@@ -342,11 +350,11 @@ class _ImmigrationPageState extends State<ImmigrationPage>
     required String icon,
     required String title,
     required String subtitle,
+    required String description,
+    required VoidCallback onTap,
   }) {
     return GestureDetector(
-      onTap: () {
-        // TODO: Navigate to immigration detail
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
@@ -354,43 +362,229 @@ class _ImmigrationPageState extends State<ImmigrationPage>
           border: Border.all(color: AppTheme.line, width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              icon,
-              style: const TextStyle(fontSize: 36),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.fredoka(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.fg,
+            Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.nunito(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.muted,
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.fg,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.nunito(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppTheme.accent.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppTheme.accent,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Icon(
+                      Icons.lightbulb_outline,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: GoogleFonts.nunito(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.fg,
+                        height: 1.3,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: AppTheme.muted,
-            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showImmigrationDetail(BuildContext context, String icon, String title, String subtitle, String description) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.line,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: AppTheme.accent.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    icon,
+                    style: const TextStyle(fontSize: 36),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                title,
+                style: GoogleFonts.fredoka(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.fg,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: GoogleFonts.nunito(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: AppTheme.muted,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                decoration: BoxDecoration(
+                  color: AppTheme.accent.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: AppTheme.accent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.lightbulb_outline,
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        description,
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.fg,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'CERRAR',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

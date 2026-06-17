@@ -142,6 +142,9 @@ class _FinancePageState extends State<FinancePage>
                         icon: '📈',
                         title: 'IUL',
                         subtitle: 'Indexed Universal Life',
+                        description: 'Protege a tu familia y haz crecer tu dinero sin riesgo de perderlo.',
+                        tipIcon: Icons.shield_outlined,
+                        tipColor: AppTheme.accent,
                       ),
 
                       const SizedBox(height: 12),
@@ -150,6 +153,9 @@ class _FinancePageState extends State<FinancePage>
                         icon: '💰',
                         title: 'Anualidades',
                         subtitle: 'Ingresos seguros garantizados',
+                        description: 'Ingresos mensuales de por vida. Sin preocupación de quedarte sin dinero.',
+                        tipIcon: Icons.calendar_month_outlined,
+                        tipColor: AppTheme.good,
                       ),
                     ],
                   ),
@@ -326,52 +332,120 @@ class _FinancePageState extends State<FinancePage>
     required String icon,
     required String title,
     required String subtitle,
+    String? description,
+    IconData? tipIcon,
+    Color? tipColor,
   }) {
-    return GestureDetector(
-      onTap: () {
-        // TODO: Navigate to finance detail
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppTheme.line, width: 1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Text(
-              icon,
-              style: const TextStyle(fontSize: 36),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppTheme.accent.withValues(alpha: 0.15),
+                        AppTheme.accent.withValues(alpha: 0.05),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Center(
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.fg,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.nunito(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.fredoka(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.fg,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.nunito(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.muted,
-                    ),
-                  ),
-                ],
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: (tipColor ?? AppTheme.accent).withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16),
               ),
             ),
-            // Sin flecha: estas opciones no tienen subpantalla aún
-          ],
-        ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: tipColor ?? AppTheme.accent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    tipIcon ?? Icons.lightbulb_outline,
+                    color: Colors.white,
+                    size: 14,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    description ?? '',
+                    style: GoogleFonts.nunito(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.fg,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

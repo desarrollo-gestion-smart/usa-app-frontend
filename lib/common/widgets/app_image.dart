@@ -141,11 +141,7 @@ class _BlurryPlaceholder extends StatelessWidget {
   final double? height;
   final BorderRadius? borderRadius;
 
-  const _BlurryPlaceholder({
-    this.width,
-    this.height,
-    this.borderRadius,
-  });
+  const _BlurryPlaceholder() : height = null, width = null, borderRadius = null;
 
   @override
   Widget build(BuildContext context) {

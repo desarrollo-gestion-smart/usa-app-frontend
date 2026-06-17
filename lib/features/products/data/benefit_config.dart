@@ -251,4 +251,26 @@ final Map<String, BenefitConfig> benefitConfigs = {
       ),
     ],
   ),
+  'Notario': BenefitConfig(
+    title: 'Notario',
+    coverPath: 'assets/images/portadas/notario.png',
+    bebeMessage: 'Servicios notariales confiables para tus documentos importantes.',
+    items: [
+      const BenefitItemData(
+        imagePath: 'assets/images/items/notario.png',
+        title: 'Autenticaciones',
+        description: 'Certifica la autenticidad de tus documentos.',
+      ),
+      const BenefitItemData(
+        imagePath: 'assets/images/items/notario.png',
+        title: 'Escrituras',
+        description: 'Elaboración y firma de escrituras públicas.',
+      ),
+      const BenefitItemData(
+        imagePath: 'assets/images/items/notario.png',
+        title: 'Declaraciones juradas',
+        description: 'Legaliza tus declaraciones ante autoridades.',
+      ),
+    ],
+  ),
 };

@@ -1,7 +1,7 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
 import 'package:all_benefits_group/features/auth/data/biometric_auth_service.dart';
-import 'package:all_benefits_group/features/onboarding/presentation/qr_scan_page.dart';
+
 import 'package:all_benefits_group/features/dashboard/presentation/user_home_page.dart';
 import 'package:all_benefits_group/features/dashboard/presentation/student_home_page.dart';
 import 'package:all_benefits_group/features/vendor/presentation/vendor_dashboard_page.dart';
@@ -655,7 +655,6 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
           ),
         ),
         const SizedBox(height: 14),
-        _buildQRCard(),
       ],
     );
   }
@@ -1229,73 +1228,7 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     );
   }
 
-  Widget _buildQRCard() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => const QRScanPage()));
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          color: AppTheme.surface,
-          border: Border.all(color: AppTheme.line, width: 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppTheme.accentDim,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.qr_code_2,
-                  size: 18,
-                  color: AppTheme.accent,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Escanear código QR',
-                    style: GoogleFonts.nunito(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.fg,
-                    ),
-                  ),
-                  Text(
-                    '¿Tienes un código de agente?',
-                    style: GoogleFonts.nunito(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.muted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 14,
-              color: AppTheme.muted,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showRolesExplanation(BuildContext context) {
+void _showRolesExplanation(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,

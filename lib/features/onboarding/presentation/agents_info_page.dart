@@ -432,7 +432,7 @@ class AgentsInfoPage extends StatelessWidget {
                         ),
                         child: ClipOval(
                           child: Image.asset(
-                            'assets/images/bebe-university.png',
+                            'assets/images/bebe/notario-avatar.png',
                             fit: BoxFit.cover,
                           ),
                         ),

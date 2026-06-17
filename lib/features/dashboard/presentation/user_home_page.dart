@@ -13,7 +13,9 @@ import 'package:all_benefits_group/features/products/presentation/companies_page
 import 'package:all_benefits_group/features/products/presentation/credit_page.dart';
 import 'package:all_benefits_group/features/products/presentation/real_estate_page.dart';
 import 'package:all_benefits_group/features/products/presentation/loans_page.dart';
+import 'package:all_benefits_group/features/products/presentation/notario_page.dart';
 import 'package:all_benefits_group/features/onboarding/presentation/started_logins_page.dart';
+import 'package:all_benefits_group/features/onboarding/presentation/qr_scan_page.dart';
 import 'package:all_benefits_group/features/profile/presentation/profile_page.dart';
 import 'package:all_benefits_group/features/client/presentation/my_services_page.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,7 @@ class _UserHomePageState extends State<UserHomePage>
     {'name': 'Taxes', 'imageUrl': 'https://res.cloudinary.com/dll5kptjp/image/upload/w_300,q_95,f_auto/v1779113420/taxes_av74sq.png'},
     {'name': 'Inmigración', 'imageUrl': 'https://res.cloudinary.com/dll5kptjp/image/upload/w_300,q_95,f_auto/v1779113420/inmigracion_koagzv.png'},
     {'name': 'Real Estate', 'imageUrl': 'https://res.cloudinary.com/dll5kptjp/image/upload/w_300,q_95,f_auto/v1779113421/real-state_w0n53e.png'},
+    {'name': 'Notario', 'imageUrl': 'https://res.cloudinary.com/dll5kptjp/image/upload/v1781632536/ChatGPT_Image_16_jun_2026__02_53_04_p.m.-removebg-preview_ojjvum.png'},
   ];
 
   Map<String, dynamic>? _recommendationData;
@@ -653,13 +656,13 @@ class _UserHomePageState extends State<UserHomePage>
                         errorBuilder: (context, error, stackTrace) {
                           debugPrint('❌ [Banner] Error cargando imagen: $error');
                           return Image.asset(
-                            'assets/images/bebe-university.png',
+                            'assets/images/bebe/notario-avatar.png',
                             fit: BoxFit.cover,
                           );
                         },
                       )
                     : Image.asset(
-                        'assets/images/bebe-university.png',
+                        'assets/images/bebe/notario-avatar.png',
                         fit: BoxFit.cover,
                       ),
               ),
@@ -826,6 +829,9 @@ class _UserHomePageState extends State<UserHomePage>
                       break;
                     case 'Préstamos':
                       page = const LoansPage();
+                      break;
+                    case 'Notario':
+                      page = const NotarioPage();
                       break;
                   }
                   if (page != null) {
@@ -1047,6 +1053,60 @@ class _UserHomePageState extends State<UserHomePage>
                 ),
               ),
               const Divider(height: 1, indent: 16, endIndent: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppTheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppTheme.line, width: 1),
+                  ),
+                  child: ListTile(
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppTheme.accent.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.qr_code_2,
+                        color: AppTheme.accent,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      'Escanear código QR',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.fg,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '¿Tienes un código de agente?',
+                      style: GoogleFonts.nunito(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
+                        color: AppTheme.muted,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: AppTheme.muted,
+                      size: 18,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const QRScanPage()),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Container(

@@ -30,7 +30,7 @@ class BenefitDetailPage extends StatelessWidget {
     required this.title,
     required this.coverPath,
     required this.bebeMessage,
-    this.bebeImagePath = 'assets/images/bebe-university.png',
+    this.bebeImagePath = 'assets/images/bebe/notario-avatar.png',
     required this.items,
     this.ctaText = 'CONTACTANOS',
     this.servicesText = 'Ver servicios disponibles',

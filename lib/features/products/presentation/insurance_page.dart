@@ -18,20 +18,20 @@ class _InsurancePageState extends State<InsurancePage>
   late Animation<double> _bebeAnimation;
 
   final List<Map<String, String>> insurances = [
-    {'icon': '❤️', 'name': 'Vida'},
-    {'icon': '🏥', 'name': 'Obamacare'},
-    {'icon': '🚗', 'name': 'Accidente'},
-    {'icon': '📋', 'name': 'Término'},
-    {'icon': '👴', 'name': 'Medicare'},
-    {'icon': '🏨', 'name': 'Hospitalización'},
-    {'icon': '⚙️', 'name': 'Manage Care'},
-    {'icon': '🚑', 'name': 'Auxilios Funerarios'},
-    {'icon': '🕯️', 'name': 'Preneed'},
-    {'icon': '🚙', 'name': 'Autos'},
-    {'icon': '🏠', 'name': 'Casas'},
-    {'icon': '🏪', 'name': 'Comercial'},
-    {'icon': '👓', 'name': 'Visión'},
-    {'icon': '🦷', 'name': 'Dental'},
+    {'icon': '❤️', 'name': 'Vida', 'description': 'Protege a tu familia con un plan que crece contigo.'},
+    {'icon': '🏥', 'name': 'Obamacare', 'description': 'Cobertura médica accessible para ti y tu familia.'},
+    {'icon': '🚗', 'name': 'Accidente', 'description': 'Protección financiera ante imprevistos inesperados.'},
+    {'icon': '📋', 'name': 'Morgue Protection', 'description': 'Cobertura temporal adaptable a tus necesidades.'},
+    {'icon': '👴', 'name': 'Medicare', 'description': 'Beneficios de salud para adultos mayores.'},
+    {'icon': '🏨', 'name': 'Hospitalización', 'description': 'Cubra gastos médicos por internamiento.'},
+    {'icon': '⚙️', 'name': 'Manage Care', 'description': 'Coordinación médica integral y eficiente.'},
+    {'icon': '🚑', 'name': 'Auxilios Funerarios', 'description': 'Tranquilidad para tu familia en momentos difíciles.'},
+    {'icon': '🕯️', 'name': 'Preneed', 'description': 'Planifica tus gastos funerarios con anticipación.'},
+    {'icon': '🚙', 'name': 'Autos', 'description': 'Protege tu vehículo con cobertura completa.'},
+    {'icon': '🏠', 'name': 'Casas', 'description': 'Seguro para tu hogar y pertenencias.'},
+    {'icon': '🏪', 'name': 'Comercial', 'description': 'Protección para tu negocio y empleados.'},
+    {'icon': '👓', 'name': 'Visión', 'description': 'Cuida tus ojos con exámenes y lentes cubiertos.'},
+    {'icon': '🦷', 'name': 'Dental', 'description': 'Sonrisa sana con cobertura dental completa.'},
   ];
 
   @override
@@ -150,25 +150,22 @@ class _InsurancePageState extends State<InsurancePage>
 
             const SizedBox(height: 16),
 
-            // Seguros grid
+            // Seguros list
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
-                  child: GridView.count(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    childAspectRatio: 0.85,
+                  child: Column(
                     children: insurances
                         .asMap()
                         .entries
-                        .map((entry) => _buildInsuranceItem(
-                              entry.value['icon']!,
-                              entry.value['name']!,
-                              entry.key,
+                        .map((entry) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildInsuranceItem(
+                                entry.value['icon']!,
+                                entry.value['name']!,
+                                entry.value['description']!,
+                              ),
                             ))
                         .toList(),
                   ),
@@ -341,38 +338,196 @@ class _InsurancePageState extends State<InsurancePage>
     );
   }
 
-  Widget _buildInsuranceItem(String icon, String name, int index) {
+  Widget _buildInsuranceItem(String icon, String name, String description) {
     return GestureDetector(
       onTap: () {
-        // TODO: Navigate to insurance detail
+        _showInsuranceDetail(context, icon, name, description);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: AppTheme.line, width: 1),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              icon,
-              style: const TextStyle(fontSize: 28),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              name,
-              style: GoogleFonts.fredoka(
-                fontSize: 9.5,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.fg,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.fg,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        description,
+                        style: GoogleFonts.nunito(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.muted,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showInsuranceDetail(BuildContext context, String icon, String name, String description) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.line,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: AppTheme.accent.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    icon,
+                    style: const TextStyle(fontSize: 36),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                name,
+                style: GoogleFonts.fredoka(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.fg,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                decoration: BoxDecoration(
+                  color: AppTheme.accent.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: AppTheme.accent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.lightbulb_outline,
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        description,
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.fg,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'CERRAR',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

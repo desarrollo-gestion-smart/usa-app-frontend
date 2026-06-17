@@ -138,33 +138,25 @@ class _LoansPageState extends State<LoansPage>
 
                       const SizedBox(height: 24),
 
-                      // Loans grid
-                      SizedBox(
-                        width: 300,
-                        child: GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: 1.35,
-                          children: [
-                            _buildLoanCard(
-                              icon: '👤',
-                              title: 'Individuales',
-                              subtitle: 'Dinero rápido para tus necesidades personales',
-                              borderColor: const Color(0xFFF97316),
-                              index: 0,
-                            ),
-                            _buildLoanCard(
-                              icon: '🏢',
-                              title: 'Empresariales',
-                              subtitle: 'Financiamiento para hacer crecer tu negocio',
-                              borderColor: const Color(0xFFA855F7),
-                              index: 1,
-                            ),
-                          ],
-                        ),
+                      // Loans options
+                      _buildLoanCard(
+                        icon: '👤',
+                        title: 'Individuales',
+                        subtitle: 'Dinero rápido para tus necesidades personales',
+                        description: 'Accede a efectivo flexible sin garantías. Ideal para emergencias, viajes o compras importantes.',
+                        borderColor: const Color(0xFFF97316),
+                        onTap: () => _showLoanDetail(context, '👤', 'Individuales', 'Dinero rápido para tus necesidades personales', 'Accede a efectivo flexible sin garantías. Ideal para emergencias, viajes o compras importantes.', const Color(0xFFF97316)),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _buildLoanCard(
+                        icon: '🏢',
+                        title: 'Empresariales',
+                        subtitle: 'Financiamiento para hacer crecer tu negocio',
+                        description: 'Capital de trabajo y expansión empresarial con tasas competitivas y aprobación rápida.',
+                        borderColor: const Color(0xFFA855F7),
+                        onTap: () => _showLoanDetail(context, '🏢', 'Empresariales', 'Financiamiento para hacer crecer tu negocio', 'Capital de trabajo y expansión empresarial con tasas competitivas y aprobación rápida.', const Color(0xFFA855F7)),
                       ),
                     ],
                   ),
@@ -341,71 +333,242 @@ class _LoansPageState extends State<LoansPage>
     required String icon,
     required String title,
     required String subtitle,
+    required String description,
     required Color borderColor,
-    required int index,
+    required VoidCallback onTap,
   }) {
-    final isPressed = _pressedIndex == index;
-
     return GestureDetector(
-      onTapDown: (_) {
-        setState(() => _pressedIndex = index);
-      },
-      onTapUp: (_) {
-        setState(() => _pressedIndex = null);
-      },
-      onTapCancel: () {
-        setState(() => _pressedIndex = null);
-      },
-      onTap: () {
-        // TODO: Navigate to loan detail
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        transform: Matrix4.translationValues(0, isPressed ? 3 : 0, 0),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: borderColor, width: 2),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: AppTheme.line,
-              offset: isPressed ? const Offset(0, 1) : const Offset(0, 4),
-              blurRadius: 0,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: borderColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.fg,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.nunito(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: borderColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: borderColor.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: borderColor,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Icon(
+                      Icons.lightbulb_outline,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: GoogleFonts.nunito(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.fg,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              icon,
-              style: const TextStyle(fontSize: 26),
+      ),
+    );
+  }
+
+  void _showLoanDetail(BuildContext context, String icon, String title, String subtitle, String description, Color borderColor) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppTheme.line,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 20),
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: borderColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  icon,
+                  style: const TextStyle(fontSize: 36),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             Text(
               title,
               style: GoogleFonts.fredoka(
-                fontSize: 12,
+                fontSize: 20,
                 fontWeight: FontWeight.w800,
                 color: AppTheme.fg,
               ),
-              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
             Text(
               subtitle,
               style: GoogleFonts.nunito(
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: AppTheme.muted,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: borderColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: borderColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.lightbulb_outline,
+                      color: Colors.white,
+                      size: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.fg,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: borderColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'CERRAR',
+                  style: GoogleFonts.fredoka(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
           ],
+        ),
         ),
       ),
     );

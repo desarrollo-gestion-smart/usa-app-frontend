@@ -5,17 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CompaniesPage extends StatefulWidget {
-  const CompaniesPage({super.key});
+class NotarioPage extends StatefulWidget {
+  const NotarioPage({super.key});
 
   @override
-  State<CompaniesPage> createState() => _CompaniesPageState();
+  State<NotarioPage> createState() => _NotarioPageState();
 }
 
-class _CompaniesPageState extends State<CompaniesPage>
+class _NotarioPageState extends State<NotarioPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _bebeController;
   late Animation<double> _bebeAnimation;
+
+  final List<Map<String, String>> notaryServices = [
+    {'icon': '📄', 'name': 'Autenticaciones', 'description': 'Certifica la autenticidad de tus documentos.'},
+    {'icon': '📝', 'name': 'Escrituras', 'description': 'Elaboración y firma de escrituras públicas.'},
+    {'icon': '⚖️', 'name': 'Declaraciones juradas', 'description': 'Legaliza tus declaraciones ante autoridades.'},
+    {'icon': '🔏', 'name': 'Apostillas', 'description': 'Certificación de documentos para uso internacional.'},
+    {'icon': '📋', 'name': 'Certificaciones', 'description': 'Certificación de copias y documentos oficiales.'},
+    {'icon': '💼', 'name': 'Poderes notariales', 'description': 'Otorga representación legal para actuar en tu nombre.'},
+    {'icon': '📜', 'name': 'Testamentos', 'description': 'Elaboración de testamentos y planificación sucesoria.'},
+    {'icon': '🏠', 'name': 'Escrituras de propiedad', 'description': 'Compra, venta y transferencia de bienes raíces.'},
+    {'icon': '✍️', 'name': 'Firmas autorizadas', 'description': 'Autenticación de firmas en documentos oficiales.'},
+  ];
 
   @override
   void initState() {
@@ -43,7 +55,6 @@ class _CompaniesPageState extends State<CompaniesPage>
       body: SafeArea(
         child: Column(
           children: [
-            // Back header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
@@ -58,7 +69,7 @@ class _CompaniesPageState extends State<CompaniesPage>
                   ),
                   const Spacer(),
                   Text(
-                    'Compañías',
+                    'Notario',
                     style: GoogleFonts.fredoka(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -70,114 +81,96 @@ class _CompaniesPageState extends State<CompaniesPage>
                 ],
               ),
             ),
-
-            // Main content
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              child: Column(
+                children: [
+                  AnimatedBuilder(
+                    animation: _bebeAnimation,
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: 1.0 + (_bebeAnimation.value * 0.08),
+                        child: Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppTheme.accent.withValues(
+                                alpha: 0.3 + (_bebeAnimation.value * 0.4),
+                              ),
+                              width: 2,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/images/bebe/notario.png',
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, _, _) => Image.asset(
+                                'assets/images/bebe/notario-avatar.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  Column(
+                    children: [
+                      Text(
+                        'BEBE te presenta',
+                        style: GoogleFonts.fredoka(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.fg,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${notaryServices.length} servicios notariales para tus\ndocumentos importantes.',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunito(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.muted,
+                          height: 1.45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
                   child: Column(
-                    children: [
-                      // BEBE Hero
-                      AnimatedBuilder(
-                        animation: _bebeAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: 1.0 + (_bebeAnimation.value * 0.08),
-                            child: Container(
-                              width: 72,
-                              height: 72,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: AppTheme.accent.withValues(
-                                    alpha: 0.3 + (_bebeAnimation.value * 0.4),
-                                  ),
-                                  width: 2,
-                                ),
+                    children: notaryServices
+                        .asMap()
+                        .entries
+                        .map((entry) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildServiceItem(
+                                entry.value['icon']!,
+                                entry.value['name']!,
+                                entry.value['description']!,
                               ),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  'assets/images/bebe/company.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // BEBE Message
-                      Column(
-                        children: [
-                          Text(
-                            'BEBE TE ASESORA',
-                            style: GoogleFonts.ibmPlexMono(
-                              fontSize: 9.5,
-                              fontWeight: FontWeight.w700,
-                              color: AppTheme.muted,
-                              letterSpacing: 0.22,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Transforma tu idea en negocio legalmente',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.nunito(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.fg,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Companies options
-                      _buildCompanyOption(
-                        icon: '🏢',
-                        title: 'LLC',
-                        subtitle: 'Limited Liability Company (más popular)',
-                        description: 'Protección personal con flexibilidad fiscal. Ideal para emprendedores y pequeños negocios.',
-                        onTap: () => _showCompanyDetail(context, '🏢', 'LLC', 'Limited Liability Company (más popular)', 'Protección personal con flexibilidad fiscal. Ideal para emprendedores y pequeños negocios.'),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      _buildCompanyOption(
-                        icon: '📊',
-                        title: 'S Corp',
-                        subtitle: 'Optimiza impuestos con estructura S',
-                        description: 'Evita doble tributación y paga solo impuestos personales. Perfecto para freelancers.',
-                        onTap: () => _showCompanyDetail(context, '📊', 'S Corp', 'Optimiza impuestos con estructura S', 'Evita doble tributación y paga solo impuestos personales. Perfecto para freelancers.'),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      _buildCompanyOption(
-                        icon: '🏛️',
-                        title: 'C Corp',
-                        subtitle: 'Corporación tradicional con mayores beneficios',
-                        description: 'Estructura robusta para empresas grandes. Permite emitir acciones y acceder a inversionistas.',
-                        onTap: () => _showCompanyDetail(context, '🏛️', 'C Corp', 'Corporación tradicional con mayores beneficios', 'Estructura robusta para empresas grandes. Permite emitir acciones y acceder a inversionistas.'),
-                      ),
-                    ],
+                            ))
+                        .toList(),
                   ),
                 ),
               ),
             ),
-
-            // CTA Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
                   try {
-                    final result = await AuthService.requestProductInfo(productName: 'Compañías');
+                    final result = await AuthService.requestProductInfo(productName: 'Notario');
                     final whatsappUrl = result['whatsappUrl'] as String?;
                     if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
                       final uri = Uri.parse(whatsappUrl);
@@ -237,13 +230,11 @@ class _CompaniesPageState extends State<CompaniesPage>
                 ),
               ),
             ),
-
-            // Agenda reunion Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
               child: GestureDetector(
                 onTap: () {
-                  showCalendlyInline(context, title: 'Agendar reunión - Compañías');
+                  showCalendlyInline(context, title: 'Agendar reunión - Notario');
                 },
                 child: Container(
                   width: double.infinity,
@@ -276,8 +267,6 @@ class _CompaniesPageState extends State<CompaniesPage>
                 ),
               ),
             ),
-
-            // BEBE mini helper
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Container(
@@ -298,8 +287,12 @@ class _CompaniesPageState extends State<CompaniesPage>
                       ),
                       child: ClipOval(
                         child: Image.asset(
-                          'assets/images/bebe/company.png',
+                          'assets/images/bebe/notario.png',
                           fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => Image.asset(
+                            'assets/images/bebe/notario-avatar.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -315,7 +308,7 @@ class _CompaniesPageState extends State<CompaniesPage>
                           ),
                           children: [
                             TextSpan(
-                              text: 'Toca una estructura para detalles y empezar.',
+                              text: 'Toca uno para detalles y cotizar.',
                               style: GoogleFonts.nunito(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w400,
@@ -336,15 +329,11 @@ class _CompaniesPageState extends State<CompaniesPage>
     );
   }
 
-  Widget _buildCompanyOption({
-    required String icon,
-    required String title,
-    required String subtitle,
-    required String description,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildServiceItem(String icon, String name, String description) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        _showServiceDetail(context, icon, name, description);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
@@ -357,9 +346,19 @@ class _CompaniesPageState extends State<CompaniesPage>
           children: [
             Row(
               children: [
-                Text(
-                  icon,
-                  style: const TextStyle(fontSize: 36),
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -367,7 +366,7 @@ class _CompaniesPageState extends State<CompaniesPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        name,
                         style: GoogleFonts.fredoka(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
@@ -376,60 +375,32 @@ class _CompaniesPageState extends State<CompaniesPage>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        subtitle,
+                        description,
                         style: GoogleFonts.nunito(
-                          fontSize: 10,
+                          fontSize: 11,
                           fontWeight: FontWeight.w400,
                           color: AppTheme.muted,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: AppTheme.muted,
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
                 ),
               ],
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppTheme.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: AppTheme.accent,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Icon(
-                      Icons.lightbulb_outline,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      description,
-                      style: GoogleFonts.nunito(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.fg,
-                        height: 1.3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),
@@ -437,7 +408,7 @@ class _CompaniesPageState extends State<CompaniesPage>
     );
   }
 
-  void _showCompanyDetail(BuildContext context, String icon, String title, String subtitle, String description) {
+  void _showServiceDetail(BuildContext context, String icon, String name, String description) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -453,110 +424,101 @@ class _CompaniesPageState extends State<CompaniesPage>
         ),
         child: SingleChildScrollView(
           child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppTheme.line,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: AppTheme.accent.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  icon,
-                  style: const TextStyle(fontSize: 36),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.line,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: GoogleFonts.fredoka(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.fg,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: GoogleFonts.nunito(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppTheme.muted,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: BoxDecoration(
-                color: AppTheme.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: AppTheme.accent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.lightbulb_outline,
-                      color: Colors.white,
-                      size: 14,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      description,
-                      style: GoogleFonts.nunito(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.fg,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+              const SizedBox(height: 20),
+              Container(
+                width: 64,
+                height: 64,
                 decoration: BoxDecoration(
-                  color: AppTheme.accent,
+                  color: AppTheme.accent.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    icon,
+                    style: const TextStyle(fontSize: 36),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                name,
+                style: GoogleFonts.fredoka(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.fg,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                decoration: BoxDecoration(
+                  color: AppTheme.accent.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Text(
-                  'CERRAR',
-                  style: GoogleFonts.fredoka(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: AppTheme.accent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.lightbulb_outline,
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        description,
+                        style: GoogleFonts.nunito(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.fg,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'CERRAR',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
