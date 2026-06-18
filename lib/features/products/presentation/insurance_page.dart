@@ -1,6 +1,10 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/dental_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/funeral_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/morgue_protection_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/vision_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +29,7 @@ class _InsurancePageState extends State<InsurancePage>
     {'icon': '👴', 'name': 'Medicare', 'description': 'Beneficios de salud para adultos mayores.'},
     {'icon': '🏨', 'name': 'Hospitalización', 'description': 'Cubra gastos médicos por internamiento.'},
     {'icon': '⚙️', 'name': 'Manage Care', 'description': 'Coordinación médica integral y eficiente.'},
-    {'icon': '🚑', 'name': 'Auxilios Funerarios', 'description': 'Tranquilidad para tu familia en momentos difíciles.'},
+    {'icon': '🪦', 'name': 'Auxilios Funerarios', 'description': 'Tranquilidad para tu familia en momentos difíciles.'},
     {'icon': '🕯️', 'name': 'Preneed', 'description': 'Planifica tus gastos funerarios con anticipación.'},
     {'icon': '🚙', 'name': 'Autos', 'description': 'Protege tu vehículo con cobertura completa.'},
     {'icon': '🏠', 'name': 'Casas', 'description': 'Seguro para tu hogar y pertenencias.'},
@@ -165,6 +169,43 @@ class _InsurancePageState extends State<InsurancePage>
                                 entry.value['icon']!,
                                 entry.value['name']!,
                                 entry.value['description']!,
+                                onTap: entry.value['name'] == 'Morgue Protection'
+                                    ? () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => const MorgueProtectionDetailPage(),
+                                          ),
+                                        );
+                                      }
+                                    : entry.value['name'] == 'Dental'
+                                        ? () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => const DentalDetailPage(),
+                                              ),
+                                            );
+                                          }
+                                        : entry.value['name'] == 'Visión'
+                                            ? () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => const VisionDetailPage(),
+                                                  ),
+                                                );
+                                              }
+                                            : entry.value['name'] == 'Auxilios Funerarios'
+                                                ? () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (_) => const FuneralDetailPage(),
+                                                      ),
+                                                    );
+                                                  }
+                                                : null,
                               ),
                             ))
                         .toList(),
@@ -338,9 +379,9 @@ class _InsurancePageState extends State<InsurancePage>
     );
   }
 
-  Widget _buildInsuranceItem(String icon, String name, String description) {
+  Widget _buildInsuranceItem(String icon, String name, String description, {VoidCallback? onTap}) {
     return GestureDetector(
-      onTap: () {
+      onTap: onTap ?? () {
         _showInsuranceDetail(context, icon, name, description);
       },
       child: Container(

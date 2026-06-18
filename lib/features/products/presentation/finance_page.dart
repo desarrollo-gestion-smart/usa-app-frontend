@@ -1,6 +1,7 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/iul_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -145,6 +146,14 @@ class _FinancePageState extends State<FinancePage>
                         description: 'Protege a tu familia y haz crecer tu dinero sin riesgo de perderlo.',
                         tipIcon: Icons.shield_outlined,
                         tipColor: AppTheme.accent,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const IULDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -335,8 +344,11 @@ class _FinancePageState extends State<FinancePage>
     String? description,
     IconData? tipIcon,
     Color? tipColor,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -401,6 +413,14 @@ class _FinancePageState extends State<FinancePage>
                     ],
                   ),
                 ),
+                if (onTap != null) ...[
+                  const SizedBox(width: 8),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: AppTheme.accent,
+                    size: 16,
+                  ),
+                ],
               ],
             ),
           ),
@@ -447,6 +467,7 @@ class _FinancePageState extends State<FinancePage>
           ),
         ],
       ),
+    ),
     );
   }
 }
