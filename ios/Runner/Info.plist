@@ -32,6 +32,12 @@
 	</array>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Usa Face ID o Touch ID para iniciar sesión de forma rápida y segura en USA All Benefits Group.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>USA All Benefits Group necesita acceso a la cámara para tomar fotos de documentos y servicios.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>USA All Benefits Group necesita acceso a tu galería para seleccionar imágenes de documentos y servicios.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>USA All Benefits Group necesita permiso para guardar imágenes en tu galería.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

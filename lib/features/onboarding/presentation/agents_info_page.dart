@@ -1,21 +1,32 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AgentsInfoPage extends StatelessWidget {
   final Map<String, dynamic>? sellerData;
 
   const AgentsInfoPage({super.key, this.sellerData});
 
-  String get _sellerName => sellerData?['name'] ?? 'Vendedor';
-  String? get _sellerTitle => sellerData?['title'];
-  String? get _sellerPosition => sellerData?['position'];
-  String? get _sellerDesc => sellerData?['description'];
-  String? get _sellerLocation => sellerData?['location'];
+  String get _sellerName => sellerData?['nombre'] ?? 'Vendedor';
+  String? get _sellerTitle => sellerData?['cargo'];
+  String? get _sellerDesc => sellerData?['descripcion'];
+  String? get _sellerLocation => sellerData?['ubicacion'];
   String? get _sellerPhoto => sellerData?['foto'];
-  double? get _sellerRating => (sellerData?['rating'] as num?)?.toDouble();
+  String? get _sellerEmail => sellerData?['correo'];
+  String? get _sellerPhone => sellerData?['telefono'];
+  double? get _sellerRating => (sellerData?['calificacion'] as num?)?.toDouble();
+  int? get _sellerResponseTime => sellerData?['tiempo_respuesta'] as int?;
+
+  String _formatResponseTime(int minutes) {
+    if (minutes < 60) return '${minutes}MIN';
+    final hours = minutes ~/ 60;
+    final mins = minutes % 60;
+    if (mins == 0) return '${hours}h';
+    return '${hours}h ${mins}m';
+  }
   List<String> get _sellerSpecialties {
-    final raw = sellerData?['specialties'];
+    final raw = sellerData?['especialidades'];
     if (raw is List) {
       return raw.whereType<String>().toList();
     }
@@ -232,7 +243,7 @@ class AgentsInfoPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
                         child: Column(
@@ -248,7 +259,7 @@ class AgentsInfoPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'SERVICIO\nACTIVO',
+                              'UBICACIÓN',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.nunito(
                                 fontSize: 8.5,
@@ -270,9 +281,9 @@ class AgentsInfoPage extends StatelessWidget {
                           children: [
                             Transform.translate(
                               offset: const Offset(15, -10),
-                              child: Text(
+                              child: const Text(
                                 '⭐',
-                                style: const TextStyle(fontSize: 13),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(width: 4),
@@ -280,7 +291,11 @@ class AgentsInfoPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  '4.9/5',
+                                  _sellerRating != null 
+                                      ? (_sellerRating! == _sellerRating!.roundToDouble() 
+                                          ? '${_sellerRating!.toInt()}/10' 
+                                          : '${_sellerRating!.toStringAsFixed(1)}/10')
+                                      : '-/10',
                                   style: GoogleFonts.fredoka(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w900,
@@ -289,7 +304,7 @@ class AgentsInfoPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  '50+ CLIENTES',
+                                  'CALIFICACIÓN',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.nunito(
                                     fontSize: 8.5,
@@ -336,7 +351,9 @@ class AgentsInfoPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  'TIPICAMENTE\nEN 2H',
+                                  _sellerResponseTime != null 
+                                      ? 'EN ${_formatResponseTime(_sellerResponseTime!)}' 
+                                      : '-',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.nunito(
                                     fontSize: 8.5,
@@ -478,21 +495,27 @@ class AgentsInfoPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    _buildContactButton(
-                      icon: '💬',
-                      label: 'WhatsApp',
-                      onTap: () {
-                        // TODO: Open WhatsApp with _sellerWhatsapp
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    _buildContactButton(
-                      icon: '📧',
-                      label: 'Email',
-                      onTap: () {
-                        // TODO: Open email with _sellerEmail
-                      },
-                    ),
+                    if (_sellerPhone != null && _sellerPhone!.isNotEmpty)
+                      _buildContactButton(
+                        icon: '💬',
+                        label: 'WhatsApp',
+                        onTap: () async {
+                          final cleanPhone = _sellerPhone!.replaceAll(RegExp(r'[^\d+]'), '');
+                          final uri = Uri.parse('https://wa.me/$cleanPhone');
+                          await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        },
+                      ),
+                    if (_sellerPhone != null && _sellerPhone!.isNotEmpty)
+                      const SizedBox(height: 10),
+                    if (_sellerEmail != null && _sellerEmail!.isNotEmpty)
+                      _buildContactButton(
+                        icon: '📧',
+                        label: 'Email',
+                        onTap: () async {
+                          final uri = Uri(scheme: 'mailto', path: _sellerEmail);
+                          await launchUrl(uri);
+                        },
+                      ),
                   ],
                 ),
               ),

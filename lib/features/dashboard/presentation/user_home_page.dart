@@ -603,170 +603,120 @@ class _UserHomePageState extends State<UserHomePage>
 
     final accentColor = _parseColor(colorHex);
 
-    debugPrint('🖼️ [Banner] imageUrl: $imageUrl');
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            accentColor.withValues(alpha: 0.18),
-            const Color(0xFFFFF5ED),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return GestureDetector(
+      onTap: () async {
+        if (ctaLink.startsWith('http')) {
+          final uri = Uri.parse(ctaLink);
+          final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+          if (!launched && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No se pudo abrir el enlace.')),
+            );
+          }
+        } else if (ctaLink.isNotEmpty) {
+          try {
+            final result = await AuthService.requestProductInfo(productName: title.isNotEmpty ? title : 'Recomendación');
+            final whatsappUrl = result['whatsappUrl'] as String?;
+            if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
+              final uri = Uri.parse(whatsappUrl);
+              final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+              if (!launched && mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
+                );
+              }
+            } else {
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
+              );
+            }
+          } catch (e) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: $e')),
+            );
+          }
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        height: 120,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: AppTheme.surface,
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: accentColor.withValues(alpha: 0.35), width: 1.5),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
+            if (imageUrl != null && imageUrl.isNotEmpty)
+              Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(color: accentColor.withValues(alpha: 0.3)),
+              )
+            else
+              Container(color: accentColor.withValues(alpha: 0.3)),
             Container(
-              width: 48,
-              height: 48,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: accentColor.withValues(alpha: 0.15),
-                border: Border.all(color: accentColor, width: 2),
-              ),
-              child: ClipOval(
-                child: imageUrl != null && imageUrl.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: accentColor,
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          debugPrint('❌ [Banner] Error cargando imagen: $error');
-                          return Image.asset(
-                            'assets/images/bebe/notario-avatar.png',
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      )
-                    : Image.asset(
-                        'assets/images/bebe/notario-avatar.png',
-                        fit: BoxFit.cover,
-                      ),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withValues(alpha: 0.6),
+                    Colors.black.withValues(alpha: 0.2),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    'BEBE TE AYUDA',
-                    style: GoogleFonts.ibmPlexMono(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
-                      color: accentColor,
-                      letterSpacing: 0.12,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
                   Text(
                     title,
                     style: GoogleFonts.fredoka(
-                      fontSize: 13,
+                      fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.fg,
-                      height: 1.3,
+                      color: Colors.white,
+                      height: 1.2,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: GoogleFonts.nunito(
-                      fontSize: 11.5,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.fg,
-                      height: 1.4,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      height: 1.3,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () async {
-                if (ctaLink.startsWith('http')) {
-                  final uri = Uri.parse(ctaLink);
-                  final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  if (!launched && mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No se pudo abrir el enlace.')),
-                    );
-                  }
-                } else if (ctaLink.isNotEmpty) {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: title.isNotEmpty ? title : 'Recomendación');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: accentColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: accentColor.withValues(alpha: 0.35),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: accentColor,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ],
-                ),
-                child: Text(
-                  ctaLabel,
-                  style: GoogleFonts.fredoka(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    letterSpacing: 0.1,
+                    child: Text(
+                      ctaLabel,
+                      style: GoogleFonts.fredoka(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 0.1,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

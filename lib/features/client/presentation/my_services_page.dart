@@ -1,6 +1,7 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/skeleton_box.dart';
 import 'package:all_benefits_group/features/client/data/my_services_service.dart';
+import 'package:all_benefits_group/features/client/presentation/service_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -525,6 +526,26 @@ class _MyServicesPageState extends State<MyServicesPage> {
                 icon: Icons.attach_money_outlined,
                 label: 'Cobertura: \$${_formatNumber(coverageAmount)} ${currency.toUpperCase()}',
               ),
+            const SizedBox(height: 14),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ServiceDetailPage(service: service)),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text('Ver más', style: GoogleFonts.nunito(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.white)),
+                ),
+              ),
+            ),
           ],
         ),
       ),
