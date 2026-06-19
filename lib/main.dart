@@ -82,6 +82,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       title: 'USA All Benefits Group',
       navigatorKey: _navigatorKey,
       theme: AppTheme.light(),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+        child: child!,
+      ),
       home: const SplashPage(),
     );
   }

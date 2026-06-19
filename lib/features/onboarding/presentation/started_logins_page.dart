@@ -53,6 +53,7 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
 
   Future<void> _loadSavedCredentials() async {
     final savedEmail = await BiometricAuthService.getSavedEmail();
+    final savedPassword = await BiometricAuthService.getSavedPassword();
     final hasCreds = await BiometricAuthService.hasSavedCredentials();
     final canBio = await BiometricAuthService.canCheckBiometrics();
     final label = await BiometricAuthService.getBiometricLabel();
@@ -63,6 +64,9 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     setState(() {
       if (savedEmail != null && savedEmail.isNotEmpty) {
         _emailController.text = savedEmail;
+      }
+      if (savedPassword != null && savedPassword.isNotEmpty) {
+        _passwordController.text = savedPassword;
       }
       _hasSavedCredentials = hasCreds;
       _canCheckBiometrics = canBio;
@@ -479,13 +483,7 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
               height: 24,
               child: Checkbox(
                 value: _rememberMe,
-                onChanged: (value) {
-                  setState(() => _rememberMe = value ?? false);
-                  if (!(_rememberMe)) {
-                    BiometricAuthService.clearCredentials();
-                    setState(() => _hasSavedCredentials = false);
-                  }
-                },
+                onChanged: (value) => _toggleRememberMe(value ?? false),
                 activeColor: AppTheme.accent,
                 side: BorderSide(color: AppTheme.line, width: 1.5),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -493,15 +491,7 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
             ),
             const SizedBox(width: 8),
             GestureDetector(
-              onTap: () {
-                setState(() {
-                  _rememberMe = !_rememberMe;
-                  if (!_rememberMe) {
-                    BiometricAuthService.clearCredentials();
-                    _hasSavedCredentials = false;
-                  }
-                });
-              },
+              onTap: () => _toggleRememberMe(!_rememberMe),
               child: Text(
                 'Activar inicio rápido',
                 style: GoogleFonts.nunito(
@@ -990,6 +980,35 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  Future<void> _toggleRememberMe(bool value) async {
+    if (value && _canCheckBiometrics) {
+      final didAuth = await BiometricAuthService.authenticate();
+      if (!didAuth) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Debes autenticarte con ${_biometricLabel.toLowerCase()} para activar inicio rápido.',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _rememberMe = value;
+      if (!_rememberMe) {
+        BiometricAuthService.clearCredentials();
+        _hasSavedCredentials = false;
+      }
+    });
   }
 
   Future<void> _handleBiometricLogin() async {
