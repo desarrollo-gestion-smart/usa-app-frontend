@@ -141,7 +141,7 @@ class _CreditPageState extends State<CreditPage>
 
                       // Credit options
                       _buildCreditOption(
-                        icon: '👤',
+                        icon: '👩‍💼',
                         title: 'Individuales',
                         subtitle: 'No dejes que un error crediticio de tu pasado afecte tu economía a futuro',
                         description: 'No dejes que un error crediticio de tu pasado afecte tu economía a futuro',
@@ -158,7 +158,7 @@ class _CreditPageState extends State<CreditPage>
                       const SizedBox(height: 12),
 
                       _buildCreditOption(
-                        icon: '🏢',
+                        icon: '🏬',
                         title: 'Empresariales',
                         subtitle: 'Separa tu crédito personal del negocio y empieza a crear historial comercial.',
                         description: 'Separa tu crédito personal del negocio y empieza a crear historial comercial.',

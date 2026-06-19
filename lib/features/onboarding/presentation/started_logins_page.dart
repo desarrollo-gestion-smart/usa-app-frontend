@@ -379,68 +379,6 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              _showSignIn ? 'Entrar como' : 'Registrarse como',
-              style: GoogleFonts.nunito(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.fg,
-              ),
-            ),
-            const SizedBox(width: 6),
-            GestureDetector(
-              onTap: () => _showRolesExplanation(context),
-              child: Container(
-                width: 18,
-                height: 18,
-                decoration: BoxDecoration(
-                  color: AppTheme.accentDim,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    '?',
-                    style: GoogleFonts.fredoka(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.accent,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildRoleCard(
-                'customer',
-                'Cliente',
-                imagePath: 'assets/images/bebe/bebe-user.png',
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildRoleCard(
-                'usuario',
-                'Agente',
-                imagePath: 'assets/images/bebe/finanzas-bebe.png',
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildRoleCard(
-                'estudiante',
-                'Estudiante',
-                imagePath: 'assets/images/bebe/academy.png',
-              ),
-            ),
-          ],
-        ),
         const SizedBox(height: 16),
         Text(
           'Email',
@@ -997,15 +935,11 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
 
       if (!mounted) return;
 
-      // Determinar rol esperado para validación:
-      // 1. Si viene de un flujo específico (ej: StudentInfoPage), usa expectedRole
-      // 2. Si no, usa el rol seleccionado en el UI del login
-      final expectedRole = widget.expectedRole ?? AuthService.mapRole(_selectedRole);
-      debugPrint('🔒 [Login] Validando rol → esperado=$expectedRole, real=$role');
-
-      if (role != expectedRole) {
-        debugPrint('❌ [Login] Rol mismatch: esperado=$expectedRole pero es=$role');
-        await AuthService.logout(); // limpiar sesión para evitar quedar logueado
+      // Solo validar rol si venimos de un flujo específico (ej: ClientInfoPage, StudentInfoPage).
+      // En login general el backend ya sabe qué rol tiene el usuario.
+      if (widget.expectedRole != null && role != widget.expectedRole) {
+        debugPrint('❌ [Login] Rol mismatch: esperado=${widget.expectedRole} pero es=$role');
+        await AuthService.logout();
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

@@ -142,7 +142,7 @@ class _LoansPageState extends State<LoansPage>
 
                       // Loans options
                       _buildLoanCard(
-                        icon: '👤',
+                        icon: '👨‍💼',
                         title: 'Individuales',
                         subtitle: 'No tomes decisiones a ciegas; revisa qué opciones pueden estar disponibles para ti.',
                         description: 'No tomes decisiones a ciegas; revisa qué opciones pueden estar disponibles para ti.',
@@ -160,7 +160,7 @@ class _LoansPageState extends State<LoansPage>
                       const SizedBox(height: 12),
 
                       _buildLoanCard(
-                        icon: '🏢',
+                        icon: '🏭',
                         title: 'Empresariales',
                         subtitle: 'No dejes que el dinero sea un impedimento para cumplir todos tus sueños empresariales.',
                         description: 'No dejes que el dinero sea un impedimento para cumplir todos tus sueños empresariales.',

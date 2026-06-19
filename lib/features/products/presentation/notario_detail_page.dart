@@ -16,7 +16,7 @@ class NotarioDetailPage extends StatelessWidget {
     {'icon': '✍️', 'name': 'Loan Signing Agent / Agente de firmas'},
     {'icon': '🖐️', 'name': 'Toma de huellas dactilares'},
     {'icon': '🔍', 'name': 'Inspecciones de campo'},
-    {'icon': '📋', 'name': 'Formulario I-9 para solicitudes de empleo'},
+    {'icon': '📝', 'name': 'Formulario I-9 para solicitudes de empleo'},
     {'icon': '📨', 'name': 'Process Server'},
   ];
 

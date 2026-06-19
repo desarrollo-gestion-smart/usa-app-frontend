@@ -142,7 +142,7 @@ class _CompaniesPageState extends State<CompaniesPage>
 
                       // Companies options
                       _buildCompanyOption(
-                        icon: '🏢',
+                        icon: '🏗️',
                         title: 'LLC',
                         subtitle: 'Una LLC puede ser el primer paso para crecer con más seguridad.',
                         description: 'Una LLC puede ser el primer paso para crecer con más seguridad.',

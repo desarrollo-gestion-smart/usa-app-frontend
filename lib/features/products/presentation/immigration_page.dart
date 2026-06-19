@@ -159,7 +159,7 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                       const SizedBox(height: 12),
 
                       _buildImmigrationOption(
-                        icon: '🏛️',
+                        icon: '🤲',
                         title: 'Asilos',
                         subtitle: 'Tu historia merece ser presentada con orden, claridad y cuidado.',
                         description: 'Tu historia merece ser presentada con orden, claridad y cuidado.',
@@ -193,7 +193,7 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                       const SizedBox(height: 12),
 
                       _buildImmigrationOption(
-                        icon: '📋',
+                        icon: '🪪',
                         title: 'Permisos de Trabajo',
                         subtitle: 'Trabajar legalmente puede cambiar tus oportunidades.',
                         description: 'Trabajar legalmente puede cambiar tus oportunidades.',
