@@ -1,6 +1,7 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
-import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/loan_officer_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/realtor_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,9 +142,16 @@ class _RealEstatePageState extends State<RealEstatePage>
                       _buildRealEstateOption(
                         icon: '🏦',
                         title: 'Loan Officer',
-                        subtitle: 'Financiamiento hipotecario especializado',
-                        description: 'Guía experta para tu hipoteca. Tasas fijas, FHA, VA y más. Aprobación garantizada.',
-                        onTap: () => _showRealEstateDetail(context, '🏦', 'Loan Officer', 'Financiamiento hipotecario especializado', 'Guía experta para tu hipoteca. Tasas fijas, FHA, VA y más. Aprobación garantizada.'),
+                        subtitle: 'Un buen financiamiento puede acercarte más a tu próxima propiedad.',
+                        description: 'Un buen financiamiento puede acercarte más a tu próxima propiedad.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LoanOfficerDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -151,9 +159,16 @@ class _RealEstatePageState extends State<RealEstatePage>
                       _buildRealEstateOption(
                         icon: '🏡',
                         title: 'Realtor',
-                        subtitle: 'Encuentra tu propiedad perfecta',
-                        description: 'Compra, venta o renta con un agente dedicado. Acceso a propiedades exclusivas.',
-                        onTap: () => _showRealEstateDetail(context, '🏡', 'Realtor', 'Encuentra tu propiedad perfecta', 'Compra, venta o renta con un agente dedicado. Acceso a propiedades exclusivas.'),
+                        subtitle: 'No vendas ni compres solo; hazlo con orientación de principio a fin.',
+                        description: 'No vendas ni compres solo; hazlo con orientación de principio a fin.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const RealtorDetailPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -166,29 +181,9 @@ class _RealEstatePageState extends State<RealEstatePage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Real Estate');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre real estate.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,
@@ -427,128 +422,4 @@ class _RealEstatePageState extends State<RealEstatePage>
     );
   }
 
-  void _showRealEstateDetail(BuildContext context, String icon, String title, String subtitle, String description) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppTheme.line,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: AppTheme.accent.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  icon,
-                  style: const TextStyle(fontSize: 36),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: GoogleFonts.fredoka(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.fg,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: GoogleFonts.nunito(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppTheme.muted,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: BoxDecoration(
-                color: AppTheme.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: AppTheme.accent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.lightbulb_outline,
-                      color: Colors.white,
-                      size: 14,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      description,
-                      style: GoogleFonts.nunito(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.fg,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppTheme.accent,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'CERRAR',
-                  style: GoogleFonts.fredoka(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
-        ),
-        ),
-      ),
-    );
-  }
 }

@@ -2,8 +2,8 @@ import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MortgageProtectionDetailPage extends StatelessWidget {
-  const MortgageProtectionDetailPage({super.key});
+class AccidentesDetailPage extends StatelessWidget {
+  const AccidentesDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -28,7 +27,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Mortgage Protection',
+                      'Accidentes',
                       style: GoogleFonts.fredoka(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -41,20 +40,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
               ),
 
-              // Hero section
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFFF8A3D), Color(0xFFFF6B1A)],
+                    colors: [Color(0xFFFF9800), Color(0xFFE65100)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accent.withValues(alpha: 0.35),
+                      color: const Color(0xFFFF9800).withValues(alpha: 0.35),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -62,22 +60,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      '📋',
-                      style: TextStyle(fontSize: 48),
-                    ),
+                    const Text('🚗', style: TextStyle(fontSize: 48)),
                     const SizedBox(height: 16),
                     Text(
-                      'MORTGAGE PROTECTION',
+                      'ACCIDENTES',
                       style: GoogleFonts.fredoka(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Protección Hipotecaria',
+                      'Seguro de accidentes',
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -92,7 +87,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'PROTEGE TU HOGAR',
+                        'RESPALDO INMEDIATO',
                         style: GoogleFonts.ibmPlexMono(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -107,7 +102,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Main description card
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -154,7 +148,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Seguro diseñado para pagar la hipoteca en caso de fallecimiento, incapacidad o enfermedad grave. Protege tu casa. Protege a tu familia. El Seguro de Protección de Hipoteca te ayuda a mantener el pago de tu casa cubierto si tú llegas a faltar, garantizando que tus seres queridos no pierdan el hogar.',
+                        'Es un seguro diseñado para brindarte respaldo económico en caso de sufrir un accidente inesperado. A diferencia de otros seguros, se enfoca exclusivamente en eventos accidentales, ayudándote a cubrir gastos médicos, hospitalarios y otras necesidades derivadas del incidente.',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -169,7 +163,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Benefits section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -203,23 +196,28 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildBenefitItem(
-                      icon: Icons.home_outlined,
-                      text: 'Tu familia no pierde la casa',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildBenefitItem(
                       icon: Icons.healing_outlined,
-                      text: 'Cobertura en caso de enfermedad o accidente',
+                      text: 'Cobertura por accidentes, incluye caídas, golpes, fracturas, quemaduras, entre otros eventos imprevistos.',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.account_balance_outlined,
-                      text: 'Pagos directos al banco o beneficiarios',
+                      icon: Icons.attach_money_outlined,
+                      text: 'Pago directo en efectivo',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.shield_outlined,
-                      text: 'Tranquilidad financiera para el hogar',
+                      icon: Icons.family_restroom_outlined,
+                      text: 'Protección familiar en una sola póliza, posibilidad de incluir a varios miembros de la familia en un solo plan.',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.savings_outlined,
+                      text: 'Costos accesibles, es uno de los seguros más económicos',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.access_time_outlined,
+                      text: 'Cobertura 24/7, protección dentro y fuera de casa, en cualquier momento.',
                     ),
                   ],
                 ),
@@ -227,7 +225,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // CTA
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(

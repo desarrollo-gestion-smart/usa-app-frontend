@@ -2,8 +2,8 @@ import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MortgageProtectionDetailPage extends StatelessWidget {
-  const MortgageProtectionDetailPage({super.key});
+class SCorpDetailPage extends StatelessWidget {
+  const SCorpDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -28,7 +27,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Mortgage Protection',
+                      'S Corp',
                       style: GoogleFonts.fredoka(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -41,20 +40,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
               ),
 
-              // Hero section
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFFF8A3D), Color(0xFFFF6B1A)],
+                    colors: [Color(0xFF5C6BC0), Color(0xFF283593)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accent.withValues(alpha: 0.35),
+                      color: const Color(0xFF5C6BC0).withValues(alpha: 0.35),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -62,22 +60,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      '📋',
-                      style: TextStyle(fontSize: 48),
-                    ),
+                    const Text('📊', style: TextStyle(fontSize: 48)),
                     const SizedBox(height: 16),
                     Text(
-                      'MORTGAGE PROTECTION',
+                      'S CORP',
                       style: GoogleFonts.fredoka(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Protección Hipotecaria',
+                      'Elección fiscal estratégica',
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -92,7 +87,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'PROTEGE TU HOGAR',
+                        'EFICIENCIA FISCAL',
                         style: GoogleFonts.ibmPlexMono(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -107,7 +102,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Main description card
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -154,7 +148,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Seguro diseñado para pagar la hipoteca en caso de fallecimiento, incapacidad o enfermedad grave. Protege tu casa. Protege a tu familia. El Seguro de Protección de Hipoteca te ayuda a mantener el pago de tu casa cubierto si tú llegas a faltar, garantizando que tus seres queridos no pierdan el hogar.',
+                        'La S-Corp es una elección fiscal que puede ayudar a ciertos negocios a organizar mejor la forma en que reportan ingresos y distribuyen ganancias. No es una entidad separada como tal, sino una clasificación fiscal que puede aplicarse a una LLC o corporación si cumple con los requisitos establecidos.',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -169,7 +163,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Benefits section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -203,23 +196,28 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildBenefitItem(
-                      icon: Icons.home_outlined,
-                      text: 'Tu familia no pierde la casa',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildBenefitItem(
-                      icon: Icons.healing_outlined,
-                      text: 'Cobertura en caso de enfermedad o accidente',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildBenefitItem(
                       icon: Icons.account_balance_outlined,
-                      text: 'Pagos directos al banco o beneficiarios',
+                      text: 'Puede ayudar a optimizar la estructura fiscal del negocio',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.shield_outlined,
-                      text: 'Tranquilidad financiera para el hogar',
+                      icon: Icons.attach_money_outlined,
+                      text: 'Permite organizar salario y distribuciones, según elegibilidad',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.trending_up_outlined,
+                      text: 'Puede ser útil para negocios con ingresos constantes',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.assignment_outlined,
+                      text: 'Aporta mayor formalidad administrativa',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.description_outlined,
+                      text: 'Requiere cumplimiento y manejo contable adecuado',
                     ),
                   ],
                 ),
@@ -227,7 +225,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // CTA
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
@@ -256,7 +253,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'VOLVER A SEGUROS',
+                          'VOLVER A COMPAÑÍAS',
                           style: GoogleFonts.fredoka(
                             fontSize: 14,
                             fontWeight: FontWeight.w900,

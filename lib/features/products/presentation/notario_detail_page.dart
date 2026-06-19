@@ -2,8 +2,23 @@ import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MortgageProtectionDetailPage extends StatelessWidget {
-  const MortgageProtectionDetailPage({super.key});
+class NotarioDetailPage extends StatelessWidget {
+  const NotarioDetailPage({super.key});
+
+  static const List<Map<String, String>> servicesList = [
+    {'icon': '💒', 'name': 'Oficiante de bodas'},
+    {'icon': '⚖️', 'name': 'Trámite de divorcio'},
+    {'icon': '📄', 'name': 'Notarizaciones generales'},
+    {'icon': '🚗', 'name': 'Notario móvil'},
+    {'icon': '💻', 'name': 'Notario en línea'},
+    {'icon': '🌐', 'name': 'Apostilla'},
+    {'icon': '🌍', 'name': 'Traducciones certificadas'},
+    {'icon': '✍️', 'name': 'Loan Signing Agent / Agente de firmas'},
+    {'icon': '🖐️', 'name': 'Toma de huellas dactilares'},
+    {'icon': '🔍', 'name': 'Inspecciones de campo'},
+    {'icon': '📋', 'name': 'Formulario I-9 para solicitudes de empleo'},
+    {'icon': '📨', 'name': 'Process Server'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +28,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -28,7 +42,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Mortgage Protection',
+                      'Servicios Notariales',
                       style: GoogleFonts.fredoka(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -41,20 +55,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
               ),
 
-              // Hero section
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFFF8A3D), Color(0xFFFF6B1A)],
+                    colors: [Color(0xFF8D6E63), Color(0xFF4E342E)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accent.withValues(alpha: 0.35),
+                      color: const Color(0xFF8D6E63).withValues(alpha: 0.35),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -62,22 +75,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      '📋',
-                      style: TextStyle(fontSize: 48),
-                    ),
+                    const Text('🔏', style: TextStyle(fontSize: 48)),
                     const SizedBox(height: 16),
                     Text(
-                      'MORTGAGE PROTECTION',
+                      'SERVICIOS NOTARIALES',
                       style: GoogleFonts.fredoka(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Protección Hipotecaria',
+                      'Formalidad, seguridad y confianza',
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -92,7 +102,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'PROTEGE TU HOGAR',
+                        'DOCUMENTOS IMPORTANTES',
                         style: GoogleFonts.ibmPlexMono(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -107,7 +117,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Main description card
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -154,7 +163,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Seguro diseñado para pagar la hipoteca en caso de fallecimiento, incapacidad o enfermedad grave. Protege tu casa. Protege a tu familia. El Seguro de Protección de Hipoteca te ayuda a mantener el pago de tu casa cubierto si tú llegas a faltar, garantizando que tus seres queridos no pierdan el hogar.',
+                        'El servicio de notario está diseñado para ayudar a personas, familias, empresas y profesionales con la firma, verificación, autenticación y manejo de documentos importantes. Este servicio brinda mayor formalidad, seguridad y confianza al momento de realizar trámites personales, comerciales, laborales o legales.',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -169,7 +178,51 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Benefits section
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppTheme.accent.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.list_alt_outlined,
+                            color: AppTheme.accent,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Servicios',
+                          style: GoogleFonts.fredoka(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.fg,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    ...servicesList.map((service) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _buildServiceItem(
+                        icon: service['icon']!,
+                        text: service['name']!,
+                      ),
+                    )),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -203,23 +256,33 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildBenefitItem(
-                      icon: Icons.home_outlined,
-                      text: 'Tu familia no pierde la casa',
+                      icon: Icons.fingerprint_outlined,
+                      text: 'Verificación de identidad de los firmantes',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.healing_outlined,
-                      text: 'Cobertura en caso de enfermedad o accidente',
+                      icon: Icons.description_outlined,
+                      text: 'Apoyo en documentos personales, comerciales y laborales',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.account_balance_outlined,
-                      text: 'Pagos directos al banco o beneficiarios',
+                      icon: Icons.wifi_outlined,
+                      text: 'Servicio móvil o en línea, según disponibilidad',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.shield_outlined,
-                      text: 'Tranquilidad financiera para el hogar',
+                      icon: Icons.verified_outlined,
+                      text: 'Mayor formalidad en trámites importantes',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.support_outlined,
+                      text: 'Acompañamiento en procesos de firma de documentos',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.thumb_up_outlined,
+                      text: 'Servicio práctico, confiable y organizado',
                     ),
                   ],
                 ),
@@ -227,7 +290,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // CTA
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
@@ -256,7 +318,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'VOLVER A SEGUROS',
+                          'VOLVER A NOTARIO',
                           style: GoogleFonts.fredoka(
                             fontSize: 14,
                             fontWeight: FontWeight.w900,
@@ -274,6 +336,53 @@ class MortgageProtectionDetailPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildServiceItem({
+    required String icon,
+    required String text,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppTheme.accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(icon, style: const TextStyle(fontSize: 20)),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              text,
+              style: GoogleFonts.nunito(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.fg,
+                height: 1.3,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

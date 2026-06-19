@@ -2,8 +2,8 @@ import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MortgageProtectionDetailPage extends StatelessWidget {
-  const MortgageProtectionDetailPage({super.key});
+class AsilosDetailPage extends StatelessWidget {
+  const AsilosDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -28,7 +27,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Mortgage Protection',
+                      'Asilos',
                       style: GoogleFonts.fredoka(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -41,20 +40,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
               ),
 
-              // Hero section
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFFF8A3D), Color(0xFFFF6B1A)],
+                    colors: [Color(0xFFFF7043), Color(0xFFBF360C)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accent.withValues(alpha: 0.35),
+                      color: const Color(0xFFFF7043).withValues(alpha: 0.35),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -62,22 +60,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      '📋',
-                      style: TextStyle(fontSize: 48),
-                    ),
+                    const Text('🏛️', style: TextStyle(fontSize: 48)),
                     const SizedBox(height: 16),
                     Text(
-                      'MORTGAGE PROTECTION',
+                      'ASILOS',
                       style: GoogleFonts.fredoka(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Protección Hipotecaria',
+                      'Protección para quienes más lo necesitan',
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -92,7 +87,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'PROTEGE TU HOGAR',
+                        'PROTECCIÓN LEGAL',
                         style: GoogleFonts.ibmPlexMono(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -107,7 +102,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Main description card
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -154,7 +148,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Seguro diseñado para pagar la hipoteca en caso de fallecimiento, incapacidad o enfermedad grave. Protege tu casa. Protege a tu familia. El Seguro de Protección de Hipoteca te ayuda a mantener el pago de tu casa cubierto si tú llegas a faltar, garantizando que tus seres queridos no pierdan el hogar.',
+                        'El asilo es un proceso migratorio para personas que buscan protección en Estados Unidos porque temen regresar a su país por razones específicas reconocidas por la ley. Este servicio ayuda a organizar la historia, documentos, evidencias y formularios necesarios para presentar un caso de manera más clara y completa.',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -169,7 +163,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Benefits section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -203,23 +196,28 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildBenefitItem(
-                      icon: Icons.home_outlined,
-                      text: 'Tu familia no pierde la casa',
+                      icon: Icons.search_outlined,
+                      text: 'Revisión inicial del caso',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.healing_outlined,
-                      text: 'Cobertura en caso de enfermedad o accidente',
+                      icon: Icons.auto_stories_outlined,
+                      text: 'Organización de historia y evidencias',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.account_balance_outlined,
-                      text: 'Pagos directos al banco o beneficiarios',
+                      icon: Icons.description_outlined,
+                      text: 'Preparación de documentos de soporte',
                     ),
                     const SizedBox(height: 12),
                     _buildBenefitItem(
-                      icon: Icons.shield_outlined,
-                      text: 'Tranquilidad financiera para el hogar',
+                      icon: Icons.support_outlined,
+                      text: 'Acompañamiento durante el proceso',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.gpp_good_outlined,
+                      text: 'Orientación para evitar errores en la presentación',
                     ),
                   ],
                 ),
@@ -227,7 +225,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // CTA
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
@@ -256,7 +253,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'VOLVER A SEGUROS',
+                          'VOLVER A INMIGRACIÓN',
                           style: GoogleFonts.fredoka(
                             fontSize: 14,
                             fontWeight: FontWeight.w900,

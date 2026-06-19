@@ -1,6 +1,7 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/anualidades_detail_page.dart';
 import 'package:all_benefits_group/features/products/presentation/iul_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -143,7 +144,7 @@ class _FinancePageState extends State<FinancePage>
                         icon: '📈',
                         title: 'IUL',
                         subtitle: 'Indexed Universal Life',
-                        description: 'Protege a tu familia y haz crecer tu dinero sin riesgo de perderlo.',
+                        description: 'Haz crecer tus ahorros con estrategia y protégete a ti y tu familia al mismo tiempo.',
                         tipIcon: Icons.shield_outlined,
                         tipColor: AppTheme.accent,
                         onTap: () {
@@ -162,9 +163,17 @@ class _FinancePageState extends State<FinancePage>
                         icon: '💰',
                         title: 'Anualidades',
                         subtitle: 'Ingresos seguros garantizados',
-                        description: 'Ingresos mensuales de por vida. Sin preocupación de quedarte sin dinero.',
+                        description: 'Hoy puedes prepararte para vivir mañana con más tranquilidad.',
                         tipIcon: Icons.calendar_month_outlined,
                         tipColor: AppTheme.good,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const AnualidadesDetailPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -177,29 +186,9 @@ class _FinancePageState extends State<FinancePage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Finanzas');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre finanzas.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,

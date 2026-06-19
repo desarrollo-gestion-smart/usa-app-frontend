@@ -1,6 +1,8 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/reparacion_credito_empresarial_page.dart';
+import 'package:all_benefits_group/features/products/presentation/reparacion_credito_personal_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,9 +143,16 @@ class _CreditPageState extends State<CreditPage>
                       _buildCreditOption(
                         icon: '👤',
                         title: 'Individuales',
-                        subtitle: 'Repara tu crédito personal',
-                        description: 'Mejora tu score de crédito y accede a mejores tasas. Tu historial, restaurado.',
-                        onTap: () => _showCreditDetail(context, '👤', 'Individuales', 'Repara tu crédito personal', 'Mejora tu score de crédito y accede a mejores tasas. Tu historial, restaurado.'),
+                        subtitle: 'No dejes que un error crediticio de tu pasado afecte tu economía a futuro',
+                        description: 'No dejes que un error crediticio de tu pasado afecte tu economía a futuro',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ReparacionCreditoPersonalPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -151,9 +160,16 @@ class _CreditPageState extends State<CreditPage>
                       _buildCreditOption(
                         icon: '🏢',
                         title: 'Empresariales',
-                        subtitle: 'Restaura la salud crediticia de tu negocio',
-                        description: 'Fortalece el perfil crediticio de tu empresa para obtener financiamiento favorable.',
-                        onTap: () => _showCreditDetail(context, '🏢', 'Empresariales', 'Restaura la salud crediticia de tu negocio', 'Fortalece el perfil crediticio de tu empresa para obtener financiamiento favorable.'),
+                        subtitle: 'Separa tu crédito personal del negocio y empieza a crear historial comercial.',
+                        description: 'Separa tu crédito personal del negocio y empieza a crear historial comercial.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ReparacionCreditoEmpresarialPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -166,29 +182,9 @@ class _CreditPageState extends State<CreditPage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Crédito');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre reparación de crédito.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,

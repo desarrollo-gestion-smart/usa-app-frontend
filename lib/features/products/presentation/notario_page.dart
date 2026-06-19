@@ -1,6 +1,6 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
-import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/notario_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,18 +16,6 @@ class _NotarioPageState extends State<NotarioPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _bebeController;
   late Animation<double> _bebeAnimation;
-
-  final List<Map<String, String>> notaryServices = [
-    {'icon': '📄', 'name': 'Autenticaciones', 'description': 'Certifica la autenticidad de tus documentos.'},
-    {'icon': '📝', 'name': 'Escrituras', 'description': 'Elaboración y firma de escrituras públicas.'},
-    {'icon': '⚖️', 'name': 'Declaraciones juradas', 'description': 'Legaliza tus declaraciones ante autoridades.'},
-    {'icon': '🔏', 'name': 'Apostillas', 'description': 'Certificación de documentos para uso internacional.'},
-    {'icon': '📋', 'name': 'Certificaciones', 'description': 'Certificación de copias y documentos oficiales.'},
-    {'icon': '💼', 'name': 'Poderes notariales', 'description': 'Otorga representación legal para actuar en tu nombre.'},
-    {'icon': '📜', 'name': 'Testamentos', 'description': 'Elaboración de testamentos y planificación sucesoria.'},
-    {'icon': '🏠', 'name': 'Escrituras de propiedad', 'description': 'Compra, venta y transferencia de bienes raíces.'},
-    {'icon': '✍️', 'name': 'Firmas autorizadas', 'description': 'Autenticación de firmas en documentos oficiales.'},
-  ];
 
   @override
   void initState() {
@@ -81,117 +69,101 @@ class _NotarioPageState extends State<NotarioPage>
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              child: Column(
-                children: [
-                  AnimatedBuilder(
-                    animation: _bebeAnimation,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: 1.0 + (_bebeAnimation.value * 0.08),
-                        child: Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppTheme.accent.withValues(
-                                alpha: 0.3 + (_bebeAnimation.value * 0.4),
-                              ),
-                              width: 2,
-                            ),
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/images/bebe/notario.png',
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => Image.asset(
-                                'assets/images/bebe/notario-avatar.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  Column(
-                    children: [
-                      Text(
-                        'BEBE te presenta',
-                        style: GoogleFonts.fredoka(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                          color: AppTheme.fg,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${notaryServices.length} servicios notariales para tus\ndocumentos importantes.',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.nunito(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.muted,
-                          height: 1.45,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
+
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                   child: Column(
-                    children: notaryServices
-                        .asMap()
-                        .entries
-                        .map((entry) => Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: _buildServiceItem(
-                                entry.value['icon']!,
-                                entry.value['name']!,
-                                entry.value['description']!,
+                    children: [
+                      AnimatedBuilder(
+                        animation: _bebeAnimation,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: 1.0 + (_bebeAnimation.value * 0.08),
+                            child: Container(
+                              width: 72,
+                              height: 72,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppTheme.accent.withValues(
+                                    alpha: 0.3 + (_bebeAnimation.value * 0.4),
+                                  ),
+                                  width: 2,
+                                ),
                               ),
-                            ))
-                        .toList(),
+                              child: ClipOval(
+                                child: Image.asset(
+                                  'assets/images/bebe/notario.png',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, _, _) => Image.asset(
+                                    'assets/images/bebe/notario-avatar.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      Column(
+                        children: [
+                          Text(
+                            'BEBE TE AYUDA',
+                            style: GoogleFonts.ibmPlexMono(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.muted,
+                              letterSpacing: 0.22,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Desde bodas hasta documentos legales, tenemos soluciones notariales para ti.',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.nunito(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.fg,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      _buildNotarioOption(
+                        icon: '🔏',
+                        title: 'Servicios Notariales',
+                        subtitle: 'Desde bodas hasta documentos legales, tenemos soluciones notariales para ti.',
+                        description: 'Desde bodas hasta documentos legales, tenemos soluciones notariales para ti.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const NotarioDetailPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Notario');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre servicios notariales.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,
@@ -230,6 +202,7 @@ class _NotarioPageState extends State<NotarioPage>
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
               child: GestureDetector(
@@ -267,6 +240,7 @@ class _NotarioPageState extends State<NotarioPage>
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Container(
@@ -308,7 +282,7 @@ class _NotarioPageState extends State<NotarioPage>
                           ),
                           children: [
                             TextSpan(
-                              text: 'Toca uno para detalles y cotizar.',
+                              text: 'Toca para ver todos los servicios notariales.',
                               style: GoogleFonts.nunito(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w400,
@@ -329,11 +303,15 @@ class _NotarioPageState extends State<NotarioPage>
     );
   }
 
-  Widget _buildServiceItem(String icon, String name, String description) {
+  Widget _buildNotarioOption({
+    required String icon,
+    required String title,
+    required String subtitle,
+    required String description,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
-      onTap: () {
-        _showServiceDetail(context, icon, name, description);
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
@@ -366,7 +344,7 @@ class _NotarioPageState extends State<NotarioPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        title,
                         style: GoogleFonts.fredoka(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
@@ -375,14 +353,12 @@ class _NotarioPageState extends State<NotarioPage>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        description,
+                        subtitle,
                         style: GoogleFonts.nunito(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
                           color: AppTheme.muted,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -402,123 +378,45 @@ class _NotarioPageState extends State<NotarioPage>
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showServiceDetail(BuildContext context, String icon, String name, String description) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppTheme.line,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppTheme.accent.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(height: 20),
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    icon,
-                    style: const TextStyle(fontSize: 36),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                name,
-                style: GoogleFonts.fredoka(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppTheme.fg,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: AppTheme.accent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.lightbulb_outline,
-                        color: Colors.white,
-                        size: 14,
-                      ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppTheme.accent,
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        description,
-                        style: GoogleFonts.nunito(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.fg,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: AppTheme.accent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'CERRAR',
-                    style: GoogleFonts.fredoka(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w900,
+                    child: Icon(
+                      Icons.lightbulb_outline,
                       color: Colors.white,
+                      size: 12,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: GoogleFonts.nunito(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.fg,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

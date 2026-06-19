@@ -2,8 +2,8 @@ import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MortgageProtectionDetailPage extends StatelessWidget {
-  const MortgageProtectionDetailPage({super.key});
+class ReparacionCreditoPersonalPage extends StatelessWidget {
+  const ReparacionCreditoPersonalPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
@@ -28,7 +27,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Mortgage Protection',
+                      'Reparación de Crédito Personal',
                       style: GoogleFonts.fredoka(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -41,20 +40,19 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
               ),
 
-              // Hero section
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFFF8A3D), Color(0xFFFF6B1A)],
+                    colors: [Color(0xFF1E88E5), Color(0xFF0D47A1)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accent.withValues(alpha: 0.35),
+                      color: const Color(0xFF1E88E5).withValues(alpha: 0.35),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -62,13 +60,10 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      '📋',
-                      style: TextStyle(fontSize: 48),
-                    ),
+                    const Text('👤', style: TextStyle(fontSize: 48)),
                     const SizedBox(height: 16),
                     Text(
-                      'MORTGAGE PROTECTION',
+                      'REPARACIÓN DE CRÉDITO PERSONAL',
                       style: GoogleFonts.fredoka(
                         fontSize: 24,
                         fontWeight: FontWeight.w900,
@@ -77,7 +72,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Protección Hipotecaria',
+                      'Mejora tu historial crediticio',
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -92,7 +87,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'PROTEGE TU HOGAR',
+                        'NUEVAS OPORTUNIDADES',
                         style: GoogleFonts.ibmPlexMono(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -107,7 +102,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Main description card
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -154,7 +148,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Seguro diseñado para pagar la hipoteca en caso de fallecimiento, incapacidad o enfermedad grave. Protege tu casa. Protege a tu familia. El Seguro de Protección de Hipoteca te ayuda a mantener el pago de tu casa cubierto si tú llegas a faltar, garantizando que tus seres queridos no pierdan el hogar.',
+                        'La reparación de crédito personal está enfocada en revisar el reporte de crédito, identificar errores, inexactitudes o cuentas negativas y trabajar en un proceso de disputa y seguimiento. El objetivo es ayudar al cliente a entender su crédito, organizar su historial y mejorar sus oportunidades financieras de forma responsable.',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -169,7 +163,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Benefits section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -203,23 +196,28 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildBenefitItem(
+                      icon: Icons.assignment_outlined,
+                      text: 'Revisión del reporte de crédito personal',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.search_outlined,
+                      text: 'Identificación de errores o información inexacta',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.track_changes_outlined,
+                      text: 'Proceso de disputas y seguimiento',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
+                      icon: Icons.school_outlined,
+                      text: 'Educación y orientación crediticia',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildBenefitItem(
                       icon: Icons.home_outlined,
-                      text: 'Tu familia no pierde la casa',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildBenefitItem(
-                      icon: Icons.healing_outlined,
-                      text: 'Cobertura en caso de enfermedad o accidente',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildBenefitItem(
-                      icon: Icons.account_balance_outlined,
-                      text: 'Pagos directos al banco o beneficiarios',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildBenefitItem(
-                      icon: Icons.shield_outlined,
-                      text: 'Tranquilidad financiera para el hogar',
+                      text: 'Mayor preparación para aplicar a casa, auto, tarjetas u otros productos',
                     ),
                   ],
                 ),
@@ -227,7 +225,6 @@ class MortgageProtectionDetailPage extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // CTA
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
@@ -256,7 +253,7 @@ class MortgageProtectionDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'VOLVER A SEGUROS',
+                          'VOLVER A CRÉDITO',
                           style: GoogleFonts.fredoka(
                             fontSize: 14,
                             fontWeight: FontWeight.w900,

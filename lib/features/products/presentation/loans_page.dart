@@ -1,6 +1,8 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/empresariales_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/individuales_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -142,10 +144,17 @@ class _LoansPageState extends State<LoansPage>
                       _buildLoanCard(
                         icon: '👤',
                         title: 'Individuales',
-                        subtitle: 'Dinero rápido para tus necesidades personales',
-                        description: 'Accede a efectivo flexible sin garantías. Ideal para emergencias, viajes o compras importantes.',
+                        subtitle: 'No tomes decisiones a ciegas; revisa qué opciones pueden estar disponibles para ti.',
+                        description: 'No tomes decisiones a ciegas; revisa qué opciones pueden estar disponibles para ti.',
                         borderColor: const Color(0xFFF97316),
-                        onTap: () => _showLoanDetail(context, '👤', 'Individuales', 'Dinero rápido para tus necesidades personales', 'Accede a efectivo flexible sin garantías. Ideal para emergencias, viajes o compras importantes.', const Color(0xFFF97316)),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const IndividualesDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -153,10 +162,17 @@ class _LoansPageState extends State<LoansPage>
                       _buildLoanCard(
                         icon: '🏢',
                         title: 'Empresariales',
-                        subtitle: 'Financiamiento para hacer crecer tu negocio',
-                        description: 'Capital de trabajo y expansión empresarial con tasas competitivas y aprobación rápida.',
+                        subtitle: 'No dejes que el dinero sea un impedimento para cumplir todos tus sueños empresariales.',
+                        description: 'No dejes que el dinero sea un impedimento para cumplir todos tus sueños empresariales.',
                         borderColor: const Color(0xFFA855F7),
-                        onTap: () => _showLoanDetail(context, '🏢', 'Empresariales', 'Financiamiento para hacer crecer tu negocio', 'Capital de trabajo y expansión empresarial con tasas competitivas y aprobación rápida.', const Color(0xFFA855F7)),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const EmpresarialesDetailPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -169,29 +185,9 @@ class _LoansPageState extends State<LoansPage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Préstamos');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre préstamos.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,

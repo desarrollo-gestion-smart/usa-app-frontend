@@ -1,6 +1,9 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/llc_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/scorp_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/ccorp_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,9 +144,16 @@ class _CompaniesPageState extends State<CompaniesPage>
                       _buildCompanyOption(
                         icon: '🏢',
                         title: 'LLC',
-                        subtitle: 'Limited Liability Company (más popular)',
-                        description: 'Protección personal con flexibilidad fiscal. Ideal para emprendedores y pequeños negocios.',
-                        onTap: () => _showCompanyDetail(context, '🏢', 'LLC', 'Limited Liability Company (más popular)', 'Protección personal con flexibilidad fiscal. Ideal para emprendedores y pequeños negocios.'),
+                        subtitle: 'Una LLC puede ser el primer paso para crecer con más seguridad.',
+                        description: 'Una LLC puede ser el primer paso para crecer con más seguridad.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LlcDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -151,9 +161,16 @@ class _CompaniesPageState extends State<CompaniesPage>
                       _buildCompanyOption(
                         icon: '📊',
                         title: 'S Corp',
-                        subtitle: 'Optimiza impuestos con estructura S',
-                        description: 'Evita doble tributación y paga solo impuestos personales. Perfecto para freelancers.',
-                        onTap: () => _showCompanyDetail(context, '📊', 'S Corp', 'Optimiza impuestos con estructura S', 'Evita doble tributación y paga solo impuestos personales. Perfecto para freelancers.'),
+                        subtitle: 'Tu negocio puede necesitar una estructura fiscal más estratégica.',
+                        description: 'Tu negocio puede necesitar una estructura fiscal más estratégica.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SCorpDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -161,9 +178,16 @@ class _CompaniesPageState extends State<CompaniesPage>
                       _buildCompanyOption(
                         icon: '🏛️',
                         title: 'C Corp',
-                        subtitle: 'Corporación tradicional con mayores beneficios',
-                        description: 'Estructura robusta para empresas grandes. Permite emitir acciones y acceder a inversionistas.',
-                        onTap: () => _showCompanyDetail(context, '🏛️', 'C Corp', 'Corporación tradicional con mayores beneficios', 'Estructura robusta para empresas grandes. Permite emitir acciones y acceder a inversionistas.'),
+                        subtitle: 'Si tu visión es grande, tu estructura también debe serlo.',
+                        description: 'Si tu visión es grande, tu estructura también debe serlo.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CCorpDetailPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -176,29 +200,9 @@ class _CompaniesPageState extends State<CompaniesPage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Compañías');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre LLC.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,

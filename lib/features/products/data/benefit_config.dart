@@ -97,17 +97,17 @@ final Map<String, BenefitConfig> benefitConfigs = {
     bebeImagePath: 'assets/images/bebe/academy.png',
     items: [
       const BenefitItemData(
-        imagePath: 'assets/images/items/academia.webp',
+        imagePath: 'assets/images/items/academia.png',
         title: 'Cursos en línea',
         description: 'Aprende a tu ritmo, donde quieras.',
       ),
       const BenefitItemData(
-        imagePath: 'assets/images/items/academia.webp',
+        imagePath: 'assets/images/items/academia.png',
         title: 'Certificaciones',
         description: 'Avala tus conocimientos con credenciales reales.',
       ),
       const BenefitItemData(
-        imagePath: 'assets/images/items/academia.webp',
+        imagePath: 'assets/images/items/academia.png',
         title: 'Mentorías',
         description: 'Acompañamiento de expertos en tu área.',
       ),

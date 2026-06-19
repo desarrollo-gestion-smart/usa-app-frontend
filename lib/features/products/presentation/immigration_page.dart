@@ -1,6 +1,9 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
-import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/peticion_familiar_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/asilos_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/ciudadania_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/permiso_trabajo_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,9 +144,16 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                       _buildImmigrationOption(
                         icon: '👨‍👩‍👧‍👦',
                         title: 'Petición Familiar',
-                        subtitle: 'Reúnete con tus seres queridos',
-                        description: 'Proceso legal para traer a tu familia a Estados Unidos. Visas de prometido, familiar inmediato y más.',
-                        onTap: () => _showImmigrationDetail(context, '👨‍👩‍👧‍👦', 'Petición Familiar', 'Reúnete con tus seres queridos', 'Proceso legal para traer a tu familia a Estados Unidos. Visas de prometido, familiar inmediato y más.'),
+                        subtitle: 'Estar cerca de tu familia puede empezar con el trámite correcto.',
+                        description: 'Estar cerca de tu familia puede empezar con el trámite correcto.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const PeticionFamiliarDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -151,9 +161,16 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                       _buildImmigrationOption(
                         icon: '🏛️',
                         title: 'Asilos',
-                        subtitle: 'Protección para perseguidos políticos',
-                        description: 'Protección legal para quienes huyen de persecución en su país. Asesoría especializada en casos de asilo.',
-                        onTap: () => _showImmigrationDetail(context, '🏛️', 'Asilos', 'Protección para perseguidos políticos', 'Protección legal para quienes huyen de persecución en su país. Asesoría especializada en casos de asilo.'),
+                        subtitle: 'Tu historia merece ser presentada con orden, claridad y cuidado.',
+                        description: 'Tu historia merece ser presentada con orden, claridad y cuidado.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const AsilosDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -161,9 +178,16 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                       _buildImmigrationOption(
                         icon: '🇺🇸',
                         title: 'Ciudadanía',
-                        subtitle: 'Conviértete en ciudadano',
-                        description: 'Obtén la ciudadanía americana. Guía paso a paso para el proceso de naturalización.',
-                        onTap: () => _showImmigrationDetail(context, '🇺🇸', 'Ciudadanía', 'Conviértete en ciudadano', 'Obtén la ciudadanía americana. Guía paso a paso para el proceso de naturalización.'),
+                        subtitle: 'Tu camino a la ciudadanía puede empezar con una revisión correcta.',
+                        description: 'Tu camino a la ciudadanía puede empezar con una revisión correcta.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CiudadaniaDetailPage(),
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 12),
@@ -171,9 +195,16 @@ class _ImmigrationPageState extends State<ImmigrationPage>
                       _buildImmigrationOption(
                         icon: '📋',
                         title: 'Permisos de Trabajo',
-                        subtitle: 'Trabaja legalmente aquí',
-                        description: 'Autorización de empleo para trabajar legalmente en USA. DACA, EAD y otros programas.',
-                        onTap: () => _showImmigrationDetail(context, '📋', 'Permisos de Trabajo', 'Trabaja legalmente aquí', 'Autorización de empleo para trabajar legalmente en USA. DACA, EAD y otros programas.'),
+                        subtitle: 'Trabajar legalmente puede cambiar tus oportunidades.',
+                        description: 'Trabajar legalmente puede cambiar tus oportunidades.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const PermisoTrabajoDetailPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -186,29 +217,9 @@ class _ImmigrationPageState extends State<ImmigrationPage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Inmigración');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre inmigración.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,
@@ -465,128 +476,4 @@ class _ImmigrationPageState extends State<ImmigrationPage>
     );
   }
 
-  void _showImmigrationDetail(BuildContext context, String icon, String title, String subtitle, String description) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppTheme.line,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    icon,
-                    style: const TextStyle(fontSize: 36),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                style: GoogleFonts.fredoka(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppTheme.fg,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: GoogleFonts.nunito(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: AppTheme.muted,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: AppTheme.accent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.lightbulb_outline,
-                        color: Colors.white,
-                        size: 14,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        description,
-                        style: GoogleFonts.nunito(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.fg,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: AppTheme.accent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'CERRAR',
-                    style: GoogleFonts.fredoka(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
