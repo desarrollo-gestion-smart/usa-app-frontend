@@ -1,6 +1,20 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
 import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/products/presentation/accidentes_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/autos_camiones_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/casas_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/comercial_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/dental_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/poliza_cancer_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/preneed_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/funeral_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/hospitalizacion_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/medicare_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/morgue_protection_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/obamacare_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/vida_detail_page.dart';
+import 'package:all_benefits_group/features/products/presentation/vision_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,20 +32,20 @@ class _InsurancePageState extends State<InsurancePage>
   late Animation<double> _bebeAnimation;
 
   final List<Map<String, String>> insurances = [
-    {'icon': '❤️', 'name': 'Vida', 'description': 'Protege a tu familia con un plan que crece contigo.'},
+    {'icon': '❤️', 'name': 'Vida', 'description': 'La tranquilidad de tu familia empieza con una buena decisión hoy.'},
     {'icon': '🏥', 'name': 'Obamacare', 'description': 'Cobertura médica accessible para ti y tu familia.'},
-    {'icon': '🚗', 'name': 'Accidente', 'description': 'Protección financiera ante imprevistos inesperados.'},
-    {'icon': '📋', 'name': 'Morgue Protection', 'description': 'Cobertura temporal adaptable a tus necesidades.'},
-    {'icon': '👴', 'name': 'Medicare', 'description': 'Beneficios de salud para adultos mayores.'},
-    {'icon': '🏨', 'name': 'Hospitalización', 'description': 'Cubra gastos médicos por internamiento.'},
-    {'icon': '⚙️', 'name': 'Manage Care', 'description': 'Coordinación médica integral y eficiente.'},
-    {'icon': '🚑', 'name': 'Auxilios Funerarios', 'description': 'Tranquilidad para tu familia en momentos difíciles.'},
-    {'icon': '🕯️', 'name': 'Preneed', 'description': 'Planifica tus gastos funerarios con anticipación.'},
-    {'icon': '🚙', 'name': 'Autos', 'description': 'Protege tu vehículo con cobertura completa.'},
-    {'icon': '🏠', 'name': 'Casas', 'description': 'Seguro para tu hogar y pertenencias.'},
-    {'icon': '🏪', 'name': 'Comercial', 'description': 'Protección para tu negocio y empleados.'},
-    {'icon': '👓', 'name': 'Visión', 'description': 'Cuida tus ojos con exámenes y lentes cubiertos.'},
-    {'icon': '🦷', 'name': 'Dental', 'description': 'Sonrisa sana con cobertura dental completa.'},
+    {'icon': '⚠️', 'name': 'Accidentes', 'description': 'Un accidente puede pasar en segundos; tu respaldo y apoyo debe estar listo.'},
+    {'icon': '📋', 'name': 'Mortgage Protection', 'description': 'Que una tragedia no ponga en riesgo el hogar de los tuyos.'},
+    {'icon': '👴', 'name': 'Medicare', 'description': 'Tu salud merece una cobertura que se ajuste a tus necesidades.'},
+    {'icon': '🏨', 'name': 'Hospitalización', 'description': 'Una hospitalización puede ser inesperada; tu respaldo no debería serlo.'},
+    {'icon': '🪦', 'name': 'Seguros Funerarios', 'description': 'Tranquilidad para tu familia en momentos difíciles.'},
+    {'icon': '🕯️', 'name': 'Preneed', 'description': 'Un acto de amor también es dejar todo organizado.'},
+    {'icon': '🚙', 'name': 'Autos y Camiones', 'description': 'Protege tu vehículo, tu bolsillo y tu responsabilidad en la carretera.'},
+    {'icon': '🏠', 'name': 'Casas', 'description': 'Protege lo que tanto esfuerzo te ha costado construir.'},
+    {'icon': '🏪', 'name': 'Comercial', 'description': 'Un imprevisto no debería detener lo que has construido, protege tu empresa, tus clientes y tus empleados.'},
+    {'icon': '🎗️', 'name': 'Póliza de Cáncer', 'description': 'Un diagnóstico difícil no debería llegar sin respaldo económico.'},
+    {'icon': '👓', 'name': 'Visión', 'description': 'Ver bien también es parte de cuidar tu salud y calidad de vida.'},
+    {'icon': '🦷', 'name': 'Dental', 'description': 'Cuida tu salud y sonríe con tranquilidad.'},
   ];
 
   @override
@@ -165,6 +179,133 @@ class _InsurancePageState extends State<InsurancePage>
                                 entry.value['icon']!,
                                 entry.value['name']!,
                                 entry.value['description']!,
+                                onTap: entry.value['name'] == 'Vida'
+                                    ? () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => const VidaDetailPage(),
+                                          ),
+                                        );
+                                      }
+                                    : entry.value['name'] == 'Obamacare'
+                                        ? () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => const ObamacareDetailPage(),
+                                              ),
+                                            );
+                                          }
+                                        : entry.value['name'] == 'Accidentes'
+                                            ? () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => const AccidentesDetailPage(),
+                                                  ),
+                                                );
+                                              }
+                                            : entry.value['name'] == 'Medicare'
+                                                ? () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (_) => const MedicareDetailPage(),
+                                                      ),
+                                                    );
+                                                  }
+                                                : entry.value['name'] == 'Hospitalización'
+                                                    ? () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (_) => const HospitalizacionDetailPage(),
+                                                          ),
+                                                        );
+                                                      }
+                                                    : entry.value['name'] == 'Autos y Camiones'
+                                                        ? () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (_) => const AutosCamionesDetailPage(),
+                                                              ),
+                                                            );
+                                                          }
+                                                         : entry.value['name'] == 'Mortgage Protection'
+                                             ? () {
+                                                 Navigator.push(
+                                                   context,
+                                                   MaterialPageRoute(
+                                                     builder: (_) => const MortgageProtectionDetailPage(),
+                                                   ),
+                                                 );
+                                               }
+                                              : entry.value['name'] == 'Preneed'
+                                                  ? () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) => const PreneedDetailPage(),
+                                                        ),
+                                                      );
+                                                    }
+                                              : entry.value['name'] == 'Casas'
+                                                  ? () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) => const CasasDetailPage(),
+                                                        ),
+                                                      );
+                                                     }
+                                              : entry.value['name'] == 'Comercial'
+                                                  ? () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) => const ComercialDetailPage(),
+                                                        ),
+                                                      );
+                                                     }
+                                              : entry.value['name'] == 'Póliza de Cáncer'
+                                                  ? () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) => const PolizaCancerDetailPage(),
+                                                        ),
+                                                      );
+                                                    }
+                                        : entry.value['name'] == 'Dental'
+                                          ? () {
+                                              Navigator.push(
+                                                context,
+                                               MaterialPageRoute(
+                                                 builder: (_) => const DentalDetailPage(),
+                                               ),
+                                             );
+                                           }
+                                        : entry.value['name'] == 'Visión'
+                                            ? () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => const VisionDetailPage(),
+                                                  ),
+                                                );
+                                              }
+                                            : entry.value['name'] == 'Seguros Funerarios'
+                                                ? () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (_) => const FuneralDetailPage(),
+                                                      ),
+                                                    );
+                                                  }
+                                                : null,
                               ),
                             ))
                         .toList(),
@@ -178,29 +319,9 @@ class _InsurancePageState extends State<InsurancePage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: GestureDetector(
                 onTap: () async {
-                  try {
-                    final result = await AuthService.requestProductInfo(productName: 'Seguros');
-                    final whatsappUrl = result['whatsappUrl'] as String?;
-                    if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-                      final uri = Uri.parse(whatsappUrl);
-                      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      if (!launched && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                        );
-                      }
-                    } else {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
-                      );
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  final msg = Uri.encodeComponent('Hola, me gustaría recibir información sobre seguros funerarios.');
+                  final uri = Uri.parse('https://wa.me/18329076093?text=$msg');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
                 child: Container(
                   width: double.infinity,
@@ -338,9 +459,9 @@ class _InsurancePageState extends State<InsurancePage>
     );
   }
 
-  Widget _buildInsuranceItem(String icon, String name, String description) {
+  Widget _buildInsuranceItem(String icon, String name, String description, {VoidCallback? onTap}) {
     return GestureDetector(
-      onTap: () {
+      onTap: onTap ?? () {
         _showInsuranceDetail(context, icon, name, description);
       },
       child: Container(

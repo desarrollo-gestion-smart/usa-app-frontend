@@ -556,8 +556,8 @@ class _UploadSection extends StatelessWidget {
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: filePath.startsWith('http')
-                                      ? Image.network(filePath, fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder())
-                                      : Image.file(File(filePath), fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder()),
+                                      ? Image.network(filePath, fit: BoxFit.cover, errorBuilder: (_, _, _) => _buildPlaceholder())
+                                      : Image.file(File(filePath), fit: BoxFit.cover, errorBuilder: (_, _, _) => _buildPlaceholder()),
                                 )
                               : Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -704,8 +704,8 @@ class _FullScreenImageViewerState extends State<_FullScreenImageViewer> {
           maxScale: 4.0,
           child: Center(
             child: widget.images[index].startsWith('http')
-                ? Image.network(widget.images[index], fit: BoxFit.contain, errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported, color: Colors.white, size: 60))
-                : Image.file(File(widget.images[index]), fit: BoxFit.contain, errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported, color: Colors.white, size: 60)),
+                ? Image.network(widget.images[index], fit: BoxFit.contain, errorBuilder: (_, _, _) => const Icon(Icons.image_not_supported, color: Colors.white, size: 60))
+                : Image.file(File(widget.images[index]), fit: BoxFit.contain, errorBuilder: (_, _, _) => const Icon(Icons.image_not_supported, color: Colors.white, size: 60)),
           ),
         ),
       ),

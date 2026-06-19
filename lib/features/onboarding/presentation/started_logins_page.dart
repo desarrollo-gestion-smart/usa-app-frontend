@@ -565,7 +565,7 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
                 });
               },
               child: Text(
-                'Recordar contraseña',
+                'Activar inicio rápido',
                 style: GoogleFonts.nunito(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -1115,32 +1115,88 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
 
       if (!mounted) return;
 
-      // Navegación según el rol interno
-      if (_selectedRole == 'usuario') {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const VendorDashboardPage()),
-        );
-      } else if (_selectedRole == 'estudiante') {
-        final me = await AuthService.fetchMe();
-        final userName = (me['name'] as String?) ?? 'Estudiante';
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => StudentHomePage(userName: userName),
+      // Limpiar sesión para que el usuario inicie sesión manualmente
+      await AuthService.logout();
+
+      if (!mounted) return;
+
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
           ),
-        );
-      } else {
-        debugPrint('🟡 [Register] Llamando a fetchMe para obtener nombre del usuario...');
-        final me = await AuthService.fetchMe();
-        final userName = (me['name'] as String?) ?? 'Usuario';
-        debugPrint('🟢 [Register] fetchMe respondió: name=$userName');
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => UserHomePage(userName: userName),
+          backgroundColor: AppTheme.paper,
+          content: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppTheme.accent.withValues(alpha: 0.15),
+                  ),
+                  child: Icon(
+                    Icons.check_circle_rounded,
+                    color: AppTheme.accent,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  '¡Cuenta creada con éxito!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.fredoka(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: AppTheme.fg,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Ahora inicia sesión con tus credenciales para acceder a todos los beneficios.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.nunito(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppTheme.muted,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.accent,
+                      foregroundColor: AppTheme.paper,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Ir a iniciar sesión',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        );
-      }
+        ),
+      );
+
+      if (!mounted) return;
+      setState(() => _showSignIn = true);
     } catch (e) {
       if (!mounted) return;
       _showErrorSnackBar(_friendlyErrorMessage(e));

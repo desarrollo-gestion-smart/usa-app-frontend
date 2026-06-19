@@ -557,7 +557,7 @@ class _UserHomePageState extends State<UserHomePage>
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: 120,
+          height: 170,
           child: PageView.builder(
             controller: _recommendationPageController,
             itemCount: recommendations.length,
@@ -594,133 +594,69 @@ class _UserHomePageState extends State<UserHomePage>
   }
 
   Widget _buildSingleRecommendationCard(Map<String, dynamic> recommendation) {
-    final title = recommendation['title'] as String? ?? '';
-    final subtitle = recommendation['subtitle'] as String? ?? '';
     final colorHex = recommendation['color'] as String?;
-    final ctaLabel = recommendation['ctaLabel'] as String? ?? 'ACTIVAR';
-    final ctaLink = recommendation['ctaLink'] as String? ?? '';
     final imageUrl = recommendation['imageUrl'] as String?;
+    final ctaLink = recommendation['ctaLink'] as String? ?? '';
 
     final accentColor = _parseColor(colorHex);
 
     return GestureDetector(
       onTap: () async {
-        if (ctaLink.startsWith('http')) {
-          final uri = Uri.parse(ctaLink);
-          final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-          if (!launched && mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('No se pudo abrir el enlace.')),
-            );
-          }
-        } else if (ctaLink.isNotEmpty) {
+        if (ctaLink.isNotEmpty) {
           try {
-            final result = await AuthService.requestProductInfo(productName: title.isNotEmpty ? title : 'Recomendación');
-            final whatsappUrl = result['whatsappUrl'] as String?;
-            if (whatsappUrl != null && whatsappUrl.isNotEmpty) {
-              final uri = Uri.parse(whatsappUrl);
-              final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-              if (!launched && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('No se pudo abrir WhatsApp. Intenta desde tu navegador.')),
-                );
-              }
-            } else {
-              if (!mounted) return;
+            var url = ctaLink;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+              url = 'https://$url';
+            }
+            final uri = Uri.parse(url);
+            final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+            if (!launched && mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Solicitud enviada. Te contactaremos pronto.')),
+                const SnackBar(content: Text('No se pudo abrir el enlace.')),
               );
             }
           } catch (e) {
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: $e')),
-            );
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error al abrir enlace: $e')),
+              );
+            }
           }
         }
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: AppTheme.surface,
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (imageUrl != null && imageUrl.isNotEmpty)
-              Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(color: accentColor.withValues(alpha: 0.3)),
-              )
-            else
-              Container(color: accentColor.withValues(alpha: 0.3)),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withValues(alpha: 0.6),
-                    Colors.black.withValues(alpha: 0.2),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.fredoka(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      height: 1.2,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.nunito(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white.withValues(alpha: 0.9),
-                      height: 1.3,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: accentColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      ctaLabel,
-                      style: GoogleFonts.fredoka(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        letterSpacing: 0.1,
-                      ),
-                    ),
-                  ),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      height: 170,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: AppTheme.surface,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (imageUrl != null && imageUrl.isNotEmpty)
+            Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(color: accentColor.withValues(alpha: 0.3)),
+            )
+          else
+            Container(color: accentColor.withValues(alpha: 0.3)),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withValues(alpha: 0.6),
+                  Colors.black.withValues(alpha: 0.2),
                 ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
       ),
     );
   }
