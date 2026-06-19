@@ -76,10 +76,43 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
 
     debugPrint('🔐 initState: hasSavedCredentials=$hasCreds, canBiometrics=$canBio, label=$label, shouldAuto=$shouldAuto');
 
-    // Si hay credenciales + biometría + no hubo logout explícito → auto-login directo
+    // Si hay credenciales + biometría + no hubo logout explícito → auto-login con biometría
     if (shouldAuto) {
       debugPrint('🟢 [Login] Auto-biometría disponible, solicitando...');
       await _handleBiometricLogin();
+      return;
+    }
+
+    // Si no hay biometría pero hay credenciales guardadas y token → auto-login directo
+    if (hasCreds && !canBio) {
+      final isLoggedIn = await AuthService.isLoggedIn();
+      if (isLoggedIn && mounted) {
+        debugPrint('🟢 [Login] Sin biometría pero hay token, auto-navegando...');
+        final role = await AuthService.getBackendRole() ?? 'client';
+        final user = await AuthService.getUser();
+        final userName = (user?['name'] as String?) ?? 'Usuario';
+
+        if (!mounted) return;
+
+        if (role == 'seller') {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const VendorDashboardPage()),
+          );
+        } else if (role == 'student') {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => StudentHomePage(userName: userName),
+            ),
+          );
+        } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => UserHomePage(userName: userName),
+            ),
+          );
+        }
+        return;
+      }
     }
   }
 
@@ -984,6 +1017,62 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
 
   Future<void> _toggleRememberMe(bool value) async {
     if (value && _canCheckBiometrics) {
+      final biometrics = await BiometricAuthService.getAvailableBiometrics();
+      if (biometrics.isEmpty) {
+        if (!mounted) return;
+        final shouldOpen = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            backgroundColor: AppTheme.paper,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(
+              'Configurar $_biometricLabel',
+              style: GoogleFonts.fredoka(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.fg,
+              ),
+            ),
+            content: Text(
+              'Para usar inicio rápido, primero debes configurar $_biometricLabel en los ajustes de tu dispositivo.',
+              style: GoogleFonts.nunito(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.muted,
+                height: 1.4,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(
+                  'AHORA NO',
+                  style: GoogleFonts.nunito(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.muted,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(
+                  'ENTENDIDO',
+                  style: GoogleFonts.nunito(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.accent,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
       final didAuth = await BiometricAuthService.authenticate();
       if (!didAuth) {
         if (mounted) {
