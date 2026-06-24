@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/skeleton_box.dart';
+import 'package:all_benefits_group/features/auth/data/auth_service.dart';
 import 'package:all_benefits_group/features/client/data/my_services_service.dart';
 import 'package:all_benefits_group/features/client/presentation/service_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class MyServicesPage extends StatefulWidget {
   const MyServicesPage({super.key});
@@ -530,10 +534,47 @@ class _MyServicesPageState extends State<MyServicesPage> {
             Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final serviceId = service['id']?.toString() ?? '';
+                  Map<String, dynamic>? freshService;
+
+                  if (serviceId.isNotEmpty) {
+                    final baseUrl = dotenv.env['BASE_URL_PROD'] ?? '';
+                    final uri = Uri.parse('$baseUrl/api/admin/services/$serviceId');
+                    final token = await AuthService.getToken();
+
+                    debugPrint('┌──────────────────────────────────────────');
+                    debugPrint('│ 🔍 VER MÁS - GET SERVICE');
+                    debugPrint('├──────────────────────────────────────────');
+                    debugPrint('│ URL: $uri');
+                    debugPrint('│ METHOD: GET');
+                    debugPrint('│ AUTH: ${token != null ? "Bearer ${token.substring(0, 20)}..." : "none"}');
+                    debugPrint('└──────────────────────────────────────────');
+
+                    try {
+                      final res = await http.get(uri, headers: {
+                        if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+                      });
+                      debugPrint('┌──────────────────────────────────────────');
+                      debugPrint('│ 🔍 VER MÁS - RESPONSE');
+                      debugPrint('├──────────────────────────────────────────');
+                      debugPrint('│ STATUS: ${res.statusCode}');
+                      debugPrint('│ BODY: ${res.body}');
+                      debugPrint('└──────────────────────────────────────────');
+                      if (res.statusCode == 200) {
+                        final body = jsonDecode(res.body) as Map<String, dynamic>;
+                        if (body['service'] is Map<String, dynamic>) {
+                          freshService = body['service'] as Map<String, dynamic>;
+                        }
+                      }
+                    } catch (e) {
+                      debugPrint('│ 🔍 VER MÁS - ERROR: $e');
+                    }
+                  }
+
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => ServiceDetailPage(service: service)),
+                    MaterialPageRoute(builder: (_) => ServiceDetailPage(service: freshService ?? service)),
                   );
                 },
                 child: Container(

@@ -159,7 +159,7 @@ class _CreditPageState extends State<CreditPage>
 
                       _buildCreditOption(
                         icon: '🏬',
-                        title: 'Empresariales',
+                        title: 'Creación de Créditos Empresariales',
                         subtitle: 'Separa tu crédito personal del negocio y empieza a crear historial comercial.',
                         description: 'Separa tu crédito personal del negocio y empieza a crear historial comercial.',
                         onTap: () {

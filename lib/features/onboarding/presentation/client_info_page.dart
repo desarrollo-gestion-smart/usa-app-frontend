@@ -261,7 +261,7 @@ class ClientInfoPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (_) => const StartedLoginsPage(skipQuestions: true, expectedRole: 'client'),
+                          builder: (_) => const StartedLoginsPage(skipQuestions: true),
                         ),
                       );
                     },

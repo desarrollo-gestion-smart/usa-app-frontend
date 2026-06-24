@@ -107,6 +107,7 @@ class AuthService {
     await _storage.delete(key: _kUser);
     await _storage.delete(key: _kRole);
     await BiometricAuthService.clearCredentials();
+    await BiometricAuthService.setQuickStartEnabled(false);
     await BiometricAuthService.markExplicitLogout();
     debugPrint('✅ Sesión local y credenciales biométricas eliminadas');
   }

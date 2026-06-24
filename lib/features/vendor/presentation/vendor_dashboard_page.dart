@@ -699,7 +699,7 @@ class _VendorDashboardPageState extends State<VendorDashboardPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => StartedLoginsPage(expectedRole: backendRole),
+                            builder: (_) => const StartedLoginsPage(),
                           ),
                         );
                       } catch (e) {

@@ -297,6 +297,23 @@ class _NotarioPageState extends State<NotarioPage>
                 ),
               ),
             ),
+
+            const SizedBox(height: 5),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'No somos abogados, no damos consejos ni asesorías legales',
+                style: GoogleFonts.nunito(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: AppTheme.muted,
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            const SizedBox(height: 24),
           ],
         ),
       ),

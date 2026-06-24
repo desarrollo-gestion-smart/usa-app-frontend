@@ -92,7 +92,7 @@ final Map<String, BenefitConfig> benefitConfigs = {
   ),
   'Academia': BenefitConfig(
     title: 'Academia',
-    coverPath: 'assets/images/portadas/academia.webp',
+    coverPath: 'assets/images/portadas/academia.png',
     bebeMessage: 'Capacítate y certifícate para crecer profesionalmente.',
     bebeImagePath: 'assets/images/bebe/academy.png',
     items: [

@@ -1,6 +1,5 @@
 import 'package:all_benefits_group/app/theme/app_theme.dart';
 import 'package:all_benefits_group/common/widgets/calendly_webview.dart';
-import 'package:all_benefits_group/features/auth/data/auth_service.dart';
 import 'package:all_benefits_group/features/products/presentation/anualidades_detail_page.dart';
 import 'package:all_benefits_group/features/products/presentation/iul_detail_page.dart';
 import 'package:flutter/material.dart';

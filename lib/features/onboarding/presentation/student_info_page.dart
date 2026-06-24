@@ -202,7 +202,7 @@ class StudentInfoPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => const StartedLoginsPage(expectedRole: 'student'),
+                          builder: (_) => const StartedLoginsPage(),
                         ),
                       );
                     },
@@ -260,7 +260,7 @@ class StudentInfoPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (_) => const StartedLoginsPage(skipQuestions: true, expectedRole: 'student'),
+                          builder: (_) => const StartedLoginsPage(skipQuestions: true),
                         ),
                       );
                     },

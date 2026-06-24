@@ -7,12 +7,12 @@ import 'package:all_benefits_group/features/dashboard/presentation/student_home_
 import 'package:all_benefits_group/features/vendor/presentation/vendor_dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class StartedLoginsPage extends StatefulWidget {
   final bool skipQuestions;
-  final String? expectedRole;
 
-  const StartedLoginsPage({super.key, this.skipQuestions = false, this.expectedRole});
+  const StartedLoginsPage({super.key, this.skipQuestions = false});
 
   @override
   State<StartedLoginsPage> createState() => _StartedLoginsPageState();
@@ -57,7 +57,7 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     final hasCreds = await BiometricAuthService.hasSavedCredentials();
     final canBio = await BiometricAuthService.canCheckBiometrics();
     final label = await BiometricAuthService.getBiometricLabel();
-    final shouldAuto = await BiometricAuthService.shouldOfferBiometricLogin();
+    final quickStart = await BiometricAuthService.isQuickStartEnabled();
 
     if (!mounted) return;
 
@@ -71,19 +71,12 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
       _hasSavedCredentials = hasCreds;
       _canCheckBiometrics = canBio;
       _biometricLabel = label;
-      _rememberMe = hasCreds;
+      _rememberMe = quickStart;
     });
 
-    debugPrint('🔐 initState: hasSavedCredentials=$hasCreds, canBiometrics=$canBio, label=$label, shouldAuto=$shouldAuto');
+    debugPrint('🔐 initState: hasSavedCredentials=$hasCreds, canBiometrics=$canBio, label=$label, quickStart=$quickStart');
 
-    // Si hay credenciales + biometría + no hubo logout explícito → auto-login con biometría
-    if (shouldAuto) {
-      debugPrint('🟢 [Login] Auto-biometría disponible, solicitando...');
-      await _handleBiometricLogin();
-      return;
-    }
-
-    // Si no hay biometría pero hay credenciales guardadas y token → auto-login directo
+    // Fallback: si no hay biometría pero hay token → auto-navegar (caso 3)
     if (hasCreds && !canBio) {
       final isLoggedIn = await AuthService.isLoggedIn();
       if (isLoggedIn && mounted) {
@@ -952,41 +945,22 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
       }
 
       debugPrint('📛 [Login] Rol detectado: rawRole=$rawRole → normalizedRole=$role');
-      if (widget.expectedRole != null) {
-        debugPrint('🔒 [Login] Rol esperado: ${widget.expectedRole}');
-      }
 
       if (!mounted) return;
 
-      // Solo validar rol si venimos de un flujo específico (ej: ClientInfoPage, StudentInfoPage).
-      // En login general el backend ya sabe qué rol tiene el usuario.
-      if (widget.expectedRole != null && role != widget.expectedRole) {
-        debugPrint('❌ [Login] Rol mismatch: esperado=${widget.expectedRole} pero es=$role');
-        await AuthService.logout();
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Este usuario no pertenece a este rol.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      debugPrint('✅ [Login] Rol validado correctamente');
-
-      // Guardar credenciales si el usuario marcó "Recordar contraseña"
+      // Guardar credenciales si el usuario activó inicio rápido
       if (_rememberMe) {
         await BiometricAuthService.saveCredentials(
           email: email,
           password: password,
         );
-        debugPrint('🔐 Credenciales guardadas para biometría futura');
+        await BiometricAuthService.setQuickStartEnabled(true);
+        debugPrint('🔐 Inicio rápido activado: credenciales guardadas');
       } else {
         await BiometricAuthService.clearCredentials();
+        await BiometricAuthService.setQuickStartEnabled(false);
       }
 
-      // Login exitoso → borrar cualquier marca de logout explícito previo
       await BiometricAuthService.clearExplicitLogout();
 
       // Navegación según el rol real del usuario
@@ -1016,66 +990,125 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
   }
 
   Future<void> _toggleRememberMe(bool value) async {
-    if (value && _canCheckBiometrics) {
-      final biometrics = await BiometricAuthService.getAvailableBiometrics();
-      if (biometrics.isEmpty) {
-        if (!mounted) return;
-        final shouldOpen = await showDialog<bool>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            backgroundColor: AppTheme.paper,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Text(
-              'Configurar $_biometricLabel',
-              style: GoogleFonts.fredoka(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.fg,
+    if (value) {
+      if (_canCheckBiometrics) {
+        final biometrics = await BiometricAuthService.getAvailableBiometrics();
+        if (biometrics.isEmpty) {
+          if (!mounted) return;
+          await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              backgroundColor: AppTheme.paper,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-            ),
-            content: Text(
-              'Para usar inicio rápido, primero debes configurar $_biometricLabel en los ajustes de tu dispositivo.',
-              style: GoogleFonts.nunito(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.muted,
-                height: 1.4,
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text(
-                  'AHORA NO',
-                  style: GoogleFonts.nunito(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.muted,
-                  ),
+              title: Text(
+                'Configurar $_biometricLabel',
+                style: GoogleFonts.fredoka(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.fg,
                 ),
               ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(
-                  'ENTENDIDO',
-                  style: GoogleFonts.nunito(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.accent,
-                  ),
+              content: Text(
+                'Para usar inicio rápido, primero debes configurar $_biometricLabel en los ajustes de tu dispositivo.',
+                style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.muted,
+                  height: 1.4,
                 ),
               ),
-            ],
-          ),
-        );
-        return;
-      }
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: Text(
+                    'AHORA NO',
+                    style: GoogleFonts.nunito(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.muted,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: Text(
+                    'ENTENDIDO',
+                    style: GoogleFonts.nunito(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.accent,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+          return;
+        }
 
-      final didAuth = await BiometricAuthService.authenticate();
-      if (!didAuth) {
-        if (mounted) {
+        final authStatus = await BiometricAuthService.authenticateDetailed();
+        if (authStatus != BiometricAuthStatus.success) {
+          if (!mounted) return;
+
+          if (authStatus == BiometricAuthStatus.permissionDenied) {
+            final shouldOpen = await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                backgroundColor: AppTheme.paper,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: Text(
+                  'Permiso de $_biometricLabel',
+                  style: GoogleFonts.fredoka(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppTheme.fg,
+                  ),
+                ),
+                content: Text(
+                  'Para activar inicio rápido, debes permitir el acceso a $_biometricLabel. Ve a ajustes y activa el permiso.',
+                  style: GoogleFonts.nunito(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppTheme.muted,
+                    height: 1.4,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(false),
+                    child: Text(
+                      'AHORA NO',
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.muted,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(true),
+                    child: Text(
+                      'ABRIR AJUSTES',
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.accent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+            if (shouldOpen == true) {
+              await openAppSettings();
+            }
+            return;
+          }
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -1084,9 +1117,13 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
               backgroundColor: Colors.red,
             ),
           );
+          return;
         }
-        return;
       }
+
+      await BiometricAuthService.setQuickStartEnabled(true);
+    } else {
+      await BiometricAuthService.setQuickStartEnabled(false);
     }
 
     if (!mounted) return;
@@ -1094,7 +1131,6 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     setState(() {
       _rememberMe = value;
       if (!_rememberMe) {
-        BiometricAuthService.clearCredentials();
         _hasSavedCredentials = false;
       }
     });
@@ -1140,6 +1176,43 @@ class _StartedLoginsPageState extends State<StartedLoginsPage> {
     if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor completa todos los campos')),
+      );
+      return;
+    }
+
+    final phoneDigits = phone.replaceAll(RegExp(r'\D'), '');
+    if (phoneDigits.length < 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('El teléfono debe tener al menos 10 dígitos')),
+      );
+      return;
+    }
+
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (!emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ingresa una dirección de correo válida')),
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La contraseña debe tener al menos 6 caracteres')),
+      );
+      return;
+    }
+
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La contraseña debe contener al menos una mayúscula')),
+      );
+      return;
+    }
+
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La contraseña debe contener al menos una minúscula')),
       );
       return;
     }

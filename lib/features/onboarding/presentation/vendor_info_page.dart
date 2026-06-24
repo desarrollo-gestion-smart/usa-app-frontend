@@ -261,7 +261,7 @@ class VendorInfoPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (_) => const StartedLoginsPage(skipQuestions: true, expectedRole: 'seller'),
+                          builder: (_) => const StartedLoginsPage(skipQuestions: true),
                         ),
                       );
                     },

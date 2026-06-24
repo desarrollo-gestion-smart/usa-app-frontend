@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -17,6 +18,7 @@ class BiometricAuthService {
   static const _kPassword = 'saved_password';
   static const _kRememberMe = 'remember_me';
   static const _kExplicitLogout = 'explicitly_logged_out';
+  static const _kQuickStart = 'quick_start_enabled';
 
   static final LocalAuthentication _localAuth = LocalAuthentication();
 
@@ -79,13 +81,30 @@ class BiometricAuthService {
     return value == 'true';
   }
 
+  /// Guarda o elimina la marca de inicio rápido.
+  static Future<void> setQuickStartEnabled(bool value) async {
+    if (value) {
+      await _storage.write(key: _kQuickStart, value: 'true');
+    } else {
+      await _storage.delete(key: _kQuickStart);
+    }
+    debugPrint('🔐 Inicio rápido ${value ? "activado" : "desactivado"}');
+  }
+
+  /// Indica si el inicio rápido está activado.
+  static Future<bool> isQuickStartEnabled() async {
+    final value = await _storage.read(key: _kQuickStart);
+    return value == 'true';
+  }
+
   /// Determina si se debe ofrecer login biométrico al abrir la app.
   static Future<bool> shouldOfferBiometricLogin() async {
     final hasCreds = await hasSavedCredentials();
     final canBio = await canCheckBiometrics();
     final wasExplicit = await wasExplicitlyLoggedOut();
-    final result = hasCreds && canBio && !wasExplicit;
-    debugPrint('🔐 shouldOfferBiometricLogin=$result (hasCreds=$hasCreds, canBio=$canBio, wasExplicit=$wasExplicit)');
+    final quickStart = await isQuickStartEnabled();
+    final result = hasCreds && canBio && !wasExplicit && quickStart;
+    debugPrint('🔐 shouldOfferBiometricLogin=$result (hasCreds=$hasCreds, canBio=$canBio, wasExplicit=$wasExplicit, quickStart=$quickStart)');
     return result;
   }
 
@@ -130,21 +149,46 @@ class BiometricAuthService {
   /// Solicita autenticación biométrica.
   /// Retorna true si el usuario se autenticó correctamente.
   static Future<bool> authenticate() async {
+    final result = await authenticateDetailed();
+    return result == BiometricAuthStatus.success;
+  }
+
+  /// Versión detallada de autenticación biométrica.
+  /// Retorna el estado específico para manejar cada caso.
+  static Future<BiometricAuthStatus> authenticateDetailed() async {
     try {
       final label = await getBiometricLabel();
+      debugPrint('🔐 [Biometric] Solicitando autenticación...');
       final bool didAuthenticate = await _localAuth.authenticate(
         localizedReason: 'Usa tu $label para ingresar a USA All Benefits Group',
         options: const AuthenticationOptions(
           useErrorDialogs: true,
           stickyAuth: true,
-          biometricOnly: true,
         ),
       );
       debugPrint(didAuthenticate ? '✅ Biometría exitosa' : '⛔ Biometría cancelada');
-      return didAuthenticate;
+      return didAuthenticate ? BiometricAuthStatus.success : BiometricAuthStatus.cancelled;
+    } on PlatformException catch (e) {
+      debugPrint('❌ [Biometric] PlatformException: code=${e.code}, message=${e.message}, details=${e.details}');
+      if (e.code == 'PermanentDenied' || e.code == 'PermissionDenied') {
+        return BiometricAuthStatus.permissionDenied;
+      }
+      if (e.code == 'NotEnrolled') {
+        return BiometricAuthStatus.notAvailable;
+      }
+      return BiometricAuthStatus.error;
     } catch (e) {
-      debugPrint('❌ Error en autenticación biométrica: $e');
-      return false;
+      debugPrint('❌ [Biometric] Error genérico: $e');
+      return BiometricAuthStatus.error;
     }
   }
+}
+
+/// Estado detallado de la autenticación biométrica.
+enum BiometricAuthStatus {
+  success,
+  cancelled,
+  notAvailable,
+  permissionDenied,
+  error,
 }

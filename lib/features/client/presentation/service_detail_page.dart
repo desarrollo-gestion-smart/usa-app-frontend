@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:all_benefits_group/features/auth/data/auth_service.dart';
+import 'package:all_benefits_group/features/client/data/my_services_service.dart';
 
 class ServiceDetailPage extends StatefulWidget {
   final Map<String, dynamic> service;
@@ -91,39 +94,76 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
     setState(() => _isUploading = true);
 
     try {
-      final uri = Uri.parse('https://your-api.com/api/services/$serviceId/files');
-      final request = http.MultipartRequest('POST', uri);
+      final baseUrl = dotenv.env['BASE_URL_PROD'] ?? '';
+      final uri = Uri.parse('$baseUrl/api/admin/services/$serviceId');
+      final request = http.MultipartRequest('PUT', uri);
+
+      final token = await AuthService.getToken();
+      if (token != null && token.isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      debugPrint('┌──────────────────────────────────────────');
+      debugPrint('│ 📤 FILE UPLOAD REQUEST');
+      debugPrint('├──────────────────────────────────────────');
+      debugPrint('│ URL: $uri');
+      debugPrint('│ METHOD: PUT');
+      debugPrint('│ AUTH: ${token != null ? "Bearer ${token.substring(0, 20)}..." : "none"}');
+      debugPrint('│ IMAGES: ${_newImages.length}');
+      debugPrint('│ DOCUMENTS: ${_newDocuments.length}');
+      debugPrint('└──────────────────────────────────────────');
 
       for (final file in _newImages) {
         if (file.path != null) {
-          request.files.add(await http.MultipartFile.fromPath('images', file.path!));
+          request.files.add(await http.MultipartFile.fromPath('files', file.path!));
         }
       }
 
       for (final file in _newDocuments) {
         if (file.path != null) {
-          request.files.add(await http.MultipartFile.fromPath('documents', file.path!));
+          request.files.add(await http.MultipartFile.fromPath('files', file.path!));
         }
       }
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
+      debugPrint('┌──────────────────────────────────────────');
+      debugPrint('│ 📥 FILE UPLOAD RESPONSE');
+      debugPrint('├──────────────────────────────────────────');
+      debugPrint('│ STATUS: ${response.statusCode}');
+      debugPrint('│ BODY: ${response.body}');
+      debugPrint('└──────────────────────────────────────────');
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Archivos subidos exitosamente')));
-          
-          // Limpiar archivos locales
-          _newImages.clear();
-          _newDocuments.clear();
-          
-          // NOTE: Aquí podrías hacer un refresh del servicio desde el backend
-          // para obtener la lista actualizada de archivos
-          // final updatedService = await fetchServiceById(serviceId);
-          // setState(() {
-          //   _existingImages = List<String>.from(updatedService['serviceImages'] ?? []);
-          //   _existingDocuments = List<String>.from(updatedService['serviceDocuments'] ?? []);
-          // });
+        }
+
+        _newImages.clear();
+        _newDocuments.clear();
+
+        try {
+          final data = await MyServicesService.fetchUserServices();
+          final services = _extractServices(data);
+          final updated = services.cast<Map<String, dynamic>?>().firstWhere(
+            (s) => s?['id']?.toString() == serviceId,
+            orElse: () => null,
+          );
+          if (updated != null && mounted) {
+            final images = List<String>.from(updated['serviceImages'] as List? ?? []);
+            final docs = List<String>.from(updated['serviceDocuments'] as List? ?? []);
+            debugPrint('│ REFRESHED IMAGES (${images.length}): $images');
+            debugPrint('│ REFRESHED DOCS (${docs.length}): $docs');
+            setState(() {
+              _existingImages = images;
+              _existingDocuments = docs;
+            });
+          } else {
+            debugPrint('│ REFRESH: service not found in response');
+          }
+        } catch (e) {
+          debugPrint('│ REFRESH FAILED: $e');
         }
       } else {
         if (mounted) {
@@ -137,6 +177,21 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
     } finally {
       if (mounted) setState(() => _isUploading = false);
     }
+  }
+
+  List<Map<String, dynamic>> _extractServices(Map<String, dynamic> data) {
+    dynamic raw;
+    if (data['services'] is List) {
+      raw = data['services'];
+    } else if (data['data'] is Map && data['data']['services'] is List) {
+      raw = data['data']['services'];
+    } else if (data['user'] is Map && data['user']['services'] is List) {
+      raw = data['user']['services'];
+    } else if (data['result'] is Map && data['result']['services'] is List) {
+      raw = data['result']['services'];
+    }
+    if (raw == null || raw is! List) return [];
+    return raw.whereType<Map<String, dynamic>>().toList();
   }
 
   void _openFullScreenImage(BuildContext context, List<String> images, int initialIndex) {
